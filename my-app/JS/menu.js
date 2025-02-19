@@ -41,4 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('novedades').textContent = 'No hay novedades.';
     document.getElementById('habitaciones-ocupadas').textContent = 'No hay habitaciones ocupadas.';
     document.getElementById('huespedes-actuales').textContent = 'No hay huéspedes en el hotel actualmente.';
+
+    // Establecer la fecha de ingreso al valor actual
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha-ingreso').value = today;
 });

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS administrador(
 
 CREATE TABLE IF NOT EXISTS aprendiz(
     id BIGINT NOT NULL PRIMARY KEY,
-    idAdministrador SMALLINT NOT NULL,
+    idAdministrador BIGINT NOT NULL,
     tipoDocumento VARCHAR(255) NOT NULL,
     numeroFicha BIGINT NOT NULL,
     nombreCompleto VARCHAR(255) NOT NULL,
@@ -74,4 +74,26 @@ CREATE TABLE IF NOT EXISTS reserva(
     FOREIGN KEY(idAprendiz) REFERENCES aprendiz(id),
     FOREIGN KEY(numeroHabitacion) REFERENCES habitacion(numeroHabitacion),
     FOREIGN KEY(idHuesped) REFERENCES huesped(id)
+);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombreAdministrador VARCHAR(255), -- el nombre de usuario para admin
+    nombreAprendiz VARCHAR(255), -- el nombre de usuario para aprendiz
+    idAdministrador BIGINT, -- contraseña de admin
+    idAprendiz BIGINT,      -- contraseña de admin
+    rol ENUM('admin', 'user') NOT NULL,    -- Rol del usuario
+    FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
+    FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
+);
+CREATE TABLE IF NOT EXISTS permisos (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL UNIQUE -- Nombre del permiso (ej: 'crear_reserva', 'editar_huesped')
+);
+
+CREATE TABLE IF NOT EXISTS rol_permisos (
+    idRol VARCHAR(50) NOT NULL, -- Rol (admin o user)
+    idPermiso BIGINT NOT NULL,  -- Permiso asignado
+    PRIMARY KEY (idRol, idPermiso),
+    FOREIGN KEY (idPermiso) REFERENCES permisos(id)
 );
