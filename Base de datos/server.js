@@ -9,10 +9,15 @@ const port = 3000;
 app.use(bodyParser.json());
 
 // Servir archivos estáticos desde las diferentes carpetas
-app.use(express.static(path.join(__dirname, '../HTML')));
-app.use('/CSS', express.static(path.join(__dirname, '../CSS')));
-app.use('/JS', express.static(path.join(__dirname, '../JS')));
-app.use('/IMAGENES', express.static(path.join(__dirname, '../IMAGENES')));
+app.use(express.static(path.join(__dirname, '../my-app/HTML')));
+app.use('/CSS', express.static(path.join(__dirname, '../my-app/CSS')));
+app.use('/JS', express.static(path.join(__dirname, '../my-app/JS')));
+app.use('/IMAGENES', express.static(path.join(__dirname, '../my-app/IMAGENES')));
+
+// Ruta para servir el archivo index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../my-app/HTML/index.html'));
+});
 
 // Función para generar un ID único
 function generateUniqueId() {
