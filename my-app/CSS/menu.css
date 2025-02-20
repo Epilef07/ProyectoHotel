@@ -52,7 +52,6 @@ overflow: hidden;
 display: flex;
 flex-direction: column;
 min-height: 100vh;
-padding-bottom: 50px; /* Añadir espacio para el footer */
 }
 button, a {
 cursor: pointer;

@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isDarkMode) {
         document.documentElement.classList.add('dark');
         modeSwitch.classList.add('active');
-        document.querySelector('footer').classList.add('dark');
     }
 
     modeSwitch.addEventListener('click', function () {
         document.documentElement.classList.toggle('dark');
         modeSwitch.classList.toggle('active');
-        document.querySelector('footer').classList.toggle('dark');
         localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
     });
 
