@@ -79,7 +79,7 @@
             </svg>
         </a>
         <!-- aqui es el icono de los aprendices con su horario de entrada y salida -->
-        <a href="" class="app-sidebar-link">
+        <a href="/ProyectoHotel/my-app/HTML/administrador.html" class="app-sidebar-link">
             <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-pie-chart" viewBox="0 0 24 24">
             <defs />
             <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
@@ -118,13 +118,13 @@
                             <option value="ppt">Permiso por Protección Temporal</option>
                         </select>
                         <label for="num-doc">Número de Documento:</label>
-                        <input type="text" id="num-doc" name="num-doc" placeholder="numero de Documento" required>
+                        <input type="number" id="num-doc" name="num-doc" placeholder="Número de Documento" required>
                         <label for="nombre">Nombre y Apellido:</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="nombre y apellido" required>
-                        <label for="num-personas">Número de Personas:</label>
-                        <input type="number" id="num-personas" name="num-personas"required>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre y Apellido" pattern="[A-Za-z\s]+" title="Solo se permiten letras y espacios" required>
+                        <label for="cantidad-abono">Cantidad de Abono:</label>
+                        <input type="number" id="cantidad-abono" name="cantidad-abono" placeholder="Cantidad de Abono">
                         <label for="fecha-ingreso">Fecha de Ingreso:</label>
-                        <input type="date" id="fecha-ingreso" name="fecha-ingreso" value="<?php echo date('Y-m-d'); ?>" required>
+                        <input type="date" id="fecha-ingreso" name="fecha-ingreso" required>
                         <label for="fecha-salida">Fecha de Salida:</label>
                         <input type="date" id="fecha-salida" name="fecha-salida" required>
                         <button type="submit">Enviar</button>
@@ -164,6 +164,12 @@
                         modal.style.display = "none";
                     }
                 }
+
+                // Evitar que se ingresen números o caracteres especiales en el campo de nombre
+                document.getElementById('nombre').addEventListener('input', function (e) {
+                    var value = e.target.value;
+                    e.target.value = value.replace(/[^A-Za-z\s]/g, '');
+                });
             </script>
     </body>
     </html>

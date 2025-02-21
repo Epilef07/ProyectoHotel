@@ -80,7 +80,7 @@
             </svg>
         </a>
         <!-- aqui es el icono de los aprendices con su horario de entrada y salida -->
-        <a href="" class="app-sidebar-link">
+        <a href="/ProyectoHotel/my-app/HTML/administrador.html" class="app-sidebar-link">
             <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-pie-chart" viewBox="0 0 24 24">
             <defs />
             <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
@@ -112,6 +112,10 @@
                 <label for="abono">Abono:</label>
                 <input type="number" id="abono" placeholder="Ingrese el monto del abono">
             </div>
+            <!-- Botón de Imprimir Abono -->
+            <div class="form-group">
+                <button id="imprimir-abono" class="btn-verde" onclick="imprimirAbono()">Imprimir Abono</button>
+            </div>
             <div class="info-card">
                 <h3>Datos del Huésped</h3>
                 <p id="datos-huesped">Nombre del huésped seleccionado</p>
@@ -121,7 +125,13 @@
         </div>
         </div>
         </div>
-        </div>
     <script src="/ProyectoHotel/my-app/JS/cuenta.js"></script>
+    <script>
+        function imprimirAbono() {
+            // Lógica para imprimir el abono
+            var abono = document.getElementById('abono').value;
+            window.print();
+        }
+    </script>
     </body>
     </html>

@@ -43,8 +43,10 @@ box-sizing: border-box;
 }
 html, body {
 width: 100%;
-height: 100vh;
+height: 100%;
 margin: 0;
+padding: 0;
+overflow-x: hidden;
 }
 body {
 font-family: 'DM Sans', sans-serif;
@@ -63,7 +65,7 @@ flex-direction: column;
 height: 100%;
 background-color: var(--app-container);
 transition: 0.2s;
-max-width: 1800px;
+max-width: 100%;
 flex: 1;
 }
 .app-container button, .app-container input, .app-container optgroup, .app-container select, .app-container textarea {
@@ -74,6 +76,7 @@ display: flex;
 height: 100%;
 overflow: hidden;
 padding: 16px 24px 24px 0;
+flex: 1;
 }
 .app-header {
 display: flex;
@@ -226,6 +229,7 @@ height: 100%;
 display: flex;
 flex-direction: column;
 min-height: calc(100vh - 150px); /* Ajustar la altura mínima para que el contenido no se tape con el footer */
+width: 100%;
 }
 .projects-section-line {
 display: flex;
@@ -748,6 +752,24 @@ display: none;
 }
 .btn:hover {
     background-color: #45a049; /* Verde oscuro */
+}
+
+.btn-verde {
+    background-color: #4CAF50 !important; /* Verde */
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+    margin: 10px 0 !important;
+    cursor: pointer !important;
+    border-radius: 12px !important;
+}
+
+.btn-verde:hover {
+    background-color: #45a049 !important; /* Verde oscuro */
 }
 
 .grid-form {
