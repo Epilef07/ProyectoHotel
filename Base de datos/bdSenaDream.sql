@@ -78,11 +78,11 @@ CREATE TABLE IF NOT EXISTS reserva(
 
 CREATE TABLE IF NOT EXISTS usuarios (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombreAdministrador VARCHAR(255), -- el nombre de usuario para admin
-    nombreAprendiz VARCHAR(255), -- el nombre de usuario para aprendiz
-    idAdministrador BIGINT, -- contraseña de admin
-    idAprendiz BIGINT,      -- contraseña de admin
-    rol ENUM('admin', 'user') NOT NULL,    -- Rol del usuario
+    nombreUsuario VARCHAR(255) NOT NULL UNIQUE, -- Nombre de usuario (nombre del aprendiz o administrador)
+    password VARCHAR(255) NOT NULL, -- Contraseña (número de identificación)
+    rol ENUM('admin', 'user') NOT NULL, -- Rol del usuario
+    idAdministrador BIGINT, -- ID del administrador
+    idAprendiz BIGINT, -- ID del aprendiz
     FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
     FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
 );

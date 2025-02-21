@@ -7,6 +7,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Servir archivos estáticos desde las diferentes carpetas
 app.use(express.static(path.join(__dirname, '../my-app/HTML')));
@@ -19,21 +20,21 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../my-app/HTML/index.html'));
 });
 
-// Función para generar un ID único
-function generateUniqueId() {
-    return Date.now(); // Genera un ID basado en la fecha y hora actual
-}
+// Ruta para servir otros archivos HTML
+app.get('/HTML/:file', (req, res) => {
+    const file = req.params.file;
+    res.sendFile(path.join(__dirname, `../my-app/HTML/${file}`));
+});
 
 // Ruta para manejar el registro de aprendices
 app.post('/api/register', (req, res) => {
     const { tipoDocumento, numeroDocumento, nombreCompleto, telefono, numeroFicha, correoElectronico } = req.body;
 
-    const query = 'INSERT INTO aprendiz (id, idAdministrador, tipoDocumento, numeroDocumento, numeroFicha, nombreCompleto, telefono, correoElectronico, fechaHoraIngreso) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO aprendiz (id, idAdministrador, tipoDocumento, numeroFicha, nombreCompleto, telefono, correoElectronico, fechaHoraIngreso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
-        generateUniqueId(), // Genera un ID único
+        numeroDocumento, // Usar el número de documento como ID
         1, // ID del administrador, puedes cambiarlo según tu lógica
         tipoDocumento,
-        numeroDocumento,
         numeroFicha,
         nombreCompleto,
         telefono,
@@ -47,7 +48,34 @@ app.post('/api/register', (req, res) => {
             return res.status(500).json({ success: false, message: 'Error al registrar aprendiz' });
         }
         console.log('Aprendiz registrado exitosamente:', results);
-        res.status(200).json({ success: true, message: 'Aprendiz registrado exitosamente' });
+        res.redirect('/'); // Redirigir a la página de inicio después de un registro exitoso
+    });
+});
+
+// Ruta para manejar el inicio de sesión
+app.post('/api/login', (req, res) => {
+    const { nombreUsuario, password } = req.body;
+
+    const query = 'SELECT * FROM usuarios WHERE nombreUsuario = ? AND password = ?';
+    connection.query(query, [nombreUsuario, password], (err, results) => {
+        if (err) {
+            console.error('Error al iniciar sesión:', err);
+            return res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
+        }
+
+        if (results.length > 0) {
+            const user = results[0];
+            if (user.rol === 'admin') {
+                // Usuario admin encontrado, redirigir al menú de admin
+                res.redirect('/HTML/menu.html');
+            } else {
+                // Usuario normal encontrado, redirigir al menú de usuario
+                res.redirect('/HTML/menuUser.html');
+            }
+        } else {
+            // Usuario no encontrado, redirigir a la página de inicio de sesión con un mensaje de error
+            res.redirect('/?error=Nombre de usuario o contraseña incorrectos');
+        }
     });
 });
 

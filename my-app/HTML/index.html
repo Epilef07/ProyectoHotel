@@ -24,15 +24,27 @@
                 <div class="center-wrap">
                   <div class="section text-center">
                     <h4 class="mb-4 pb-3">Inicio Sesion</h4>
-                    <div class="form-group">
-                      <input type="email" class="form-style" placeholder="Correo" required>
-                      <i class="input-icon uil uil-at"></i>
-                    </div>  
-                    <div class="form-group mt-2">
-                      <input type="password" class="form-style" placeholder="Contraseña o Cedula" required>
-                      <i class="input-icon uil uil-lock-alt"></i>
+                    <form id="loginForm" action="/api/login" method="POST">
+                      <div class="form-group">
+                        <input type="text" name="nombreUsuario" class="form-style" placeholder="Nombre de Usuario" required>
+                        <i class="input-icon uil uil-user"></i>
+                      </div>  
+                      <div class="form-group mt-2">
+                        <input type="password" name="password" class="form-style" placeholder="Contraseña" required>
+                        <i class="input-icon uil uil-lock-alt"></i>
+                      </div>
+                      <button class="btn mt-2" type="submit" name="send2">Acceso</button>
+                    </form>
+                    <div id="loginMensaje">
+                      <!-- Mostrar mensaje de error si está presente en la URL -->
+                      <script>
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const errorMessage = urlParams.get('error');
+                        if (errorMessage) {
+                          document.getElementById('loginMensaje').innerHTML = '<p style="color: red;">' + errorMessage + '</p>';
+                        }
+                      </script>
                     </div>
-                    <a href="/HTML/menu.html"><button class="btn mt-2" type="submit" name="send2">Acesso</button></a>
                     <p class="mb-0 mt-4 text-center"><a href="/HTML/recuperarContrasena.html" class="link">Olvidaste tu contraseña?</a></p>
                   </div>
                 </div>
@@ -41,39 +53,41 @@
                 <div class="center-wrap">
                   <div class="section text-center">
                     <h4 class="mb-3 pb-2">Registro</h4>
-                    <form id="registroForm">
+                    <form id="registroForm" action="/api/register" method="POST">
                       <div class="form-group custom-select">
-                        <div class="select-selected">Selecciona un tipo de documento</div>
-                        <div class="select-items" required>
-                          <div data-value="CC"><i class="uil uil-id-card select-icon"></i>Cédula de Ciudadanía</div>
-                          <div data-value="TI"><i class="uil uil-id-card select-icon"></i>Tarjeta de Identidad</div>
-                          <div data-value="CE"><i class="uil uil-id-card select-icon"></i>Cédula de Extranjería</div>
-                          <div data-value="PEP"><i class="uil uil-id-card select-icon"></i>PEP</div>
-                          <div data-value="PPT"><i class="uil uil-id-card select-icon"></i>Permiso por Protección Temporal</div>
-                        </div>
+                        <select name="tipoDocumento" class="form-style" required>
+                          <option value="" disabled selected>Selecciona un tipo de documento</option>
+                          <option value="CC">Cédula de Ciudadanía</option>
+                          <option value="TI">Tarjeta de Identidad</option>
+                          <option value="CE">Cédula de Extranjería</option>
+                          <option value="PEP">PEP</option>
+                          <option value="PPT">Permiso por Protección Temporal</option>
+                        </select>
+                        <i class="input-icon uil uil-id-card"></i>
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-style" placeholder="Numero Documento" required>
+                        <input type="text" name="numeroDocumento" class="form-style" placeholder="Numero Documento" required>
                         <i class="input-icon uil uil-postcard"></i>
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-style" placeholder="Nombre Completo" required>
+                        <input type="text" name="nombreCompleto" class="form-style" placeholder="Nombre Completo" required>
                         <i class="input-icon uil uil-user"></i>
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-style" placeholder="Telefono" required>
+                        <input type="text" name="telefono" class="form-style" placeholder="Telefono" required>
                         <i class="input-icon uil uil-phone"></i>
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-style" placeholder="Numero de Ficha" required>
+                        <input type="text" name="numeroFicha" class="form-style" placeholder="Numero de Ficha" required>
                         <i class="input-icon uil uil-file-alt"></i>
                       </div>
                       <div class="form-group">
-                        <input type="email" class="form-style" placeholder="Correo Electronico" required>
+                        <input type="email" name="correoElectronico" class="form-style" placeholder="Correo Electronico" required>
                         <i class="input-icon uil uil-envelope"></i>
                       </div>
                       <button class="btn mt-2" type="submit" name="send2">Enviar</button>
                     </form>
+                    <div id="registroMensaje"></div> <!-- Contenedor para mensajes -->
                   </div>
                 </div>
               </div>
@@ -84,7 +98,7 @@
     </div>
   </div>
   <script src="/JS/jsIndex.js"></script>
-  <script src="/JS/sesion.js"></script>
-  <script src="/JS/registro.js"></script>
+  <script src="/src/sesion.js"></script>
+  <script src="/src/registro.js"></script> <!-- Asegúrate de que la ruta sea correcta -->
 </body>
 </html>

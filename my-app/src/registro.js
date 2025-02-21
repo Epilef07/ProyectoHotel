@@ -1,28 +1,31 @@
-document.querySelector('button[name="send2"]').addEventListener('click', function(event) {
-    event.preventDefault();
-    const tipoDocumento = document.querySelector('.select-selected').textContent;
-    const numeroDocumento = document.querySelector('input[placeholder="Numero Documento"]').value;
-    const nombreCompleto = document.querySelector('input[placeholder="Nombre Completo"]').value;
-    const telefono = document.querySelector('input[placeholder="Telefono"]').value;
-    const numeroFicha = document.querySelector('input[placeholder="Numero de Ficha"]').value;
-    const correoElectronico = document.querySelector('input[placeholder="Correo Electronico"]').value;
+document.getElementById('registroForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío del formulario
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
 
     fetch('/api/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ tipoDocumento, numeroDocumento, nombreCompleto, telefono, numeroFicha, correoElectronico })
+        body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Registro exitoso');
+    .then(result => {
+        if (result.success) {
+            // Recargar la página después de un registro exitoso
+            window.location.reload();
         } else {
-            alert('Error al registrar');
+            const mensajeDiv = document.getElementById('registroMensaje');
+            mensajeDiv.innerHTML = '<p style="color: red;">' + result.message + '</p>';
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        const mensajeDiv = document.getElementById('registroMensaje');
+        mensajeDiv.innerHTML = '<p style="color: red;">Error al registrar aprendiz</p>';
+    });
 });
 
 const express = require('express');

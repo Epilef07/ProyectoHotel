@@ -1,36 +1,40 @@
 DELIMITER $$
 
+-- Disparador para insertar un usuario cuando se inserta un nuevo aprendiz
 CREATE TRIGGER after_insert_aprendiz
 AFTER INSERT ON aprendiz
 FOR EACH ROW
 BEGIN
-    -- Insertar un nuevo usuario en la tabla `usuarios`
     INSERT INTO usuarios (
-        nombreAprendiz, 
-        idAprendiz, 
-        rol
+        nombreUsuario, 
+        password, 
+        rol, 
+        idAprendiz
     ) VALUES (
-        NEW.nombreCompleto, -- Usar el nombre del aprendiz recién insertado
-        NEW.id,             -- Usar el ID del aprendiz recién insertado
-        'user'              -- Asignar el rol 'user' por defecto
+        NEW.nombreCompleto, -- Usar el nombre del aprendiz recién insertado como nombre de usuario
+        NEW.id, -- Usar el número de documento del aprendiz como contraseña
+        'user',              -- Asignar el rol 'user' por defecto
+        NEW.id               -- Usar el ID del aprendiz recién insertado
     );
 END$$
-DELIMITER ;
+
 DELIMITER $$
 
+-- Disparador para insertar un usuario cuando se inserta un nuevo administrador
 CREATE TRIGGER after_insert_administrador
 AFTER INSERT ON administrador
 FOR EACH ROW
 BEGIN
-    -- Insertar un nuevo usuario en la tabla `usuarios`
     INSERT INTO usuarios (
-        nombreAdministrador, 
-        idAdministrador, 
-        rol
+        nombreUsuario, 
+        password, 
+        rol, 
+        idAdministrador
     ) VALUES (
-        CONCAT(NEW.nombre, ' ', NEW.apellido), -- Usar el nombre completo del administrador
-        NEW.id,                               -- Usar el ID del administrador recién insertado
-        'admin'                                -- Asignar el rol 'admin' por defecto
+        CONCAT(NEW.nombre, ' ', NEW.apellido), -- Usar el nombre completo del administrador como nombre de usuario
+        NEW.id,                               -- Usar el ID del administrador como contraseña
+        'admin',                              -- Asignar el rol 'admin' por defecto
+        NEW.id                                -- Usar el ID del administrador recién insertado
     );
 END$$
 
