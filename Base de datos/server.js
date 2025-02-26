@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const connection = require('./dbConnection');
+const { agregarHuesped, buscarHuesped, actualizarHuesped } = require('./crudHuespedes');
 
 const app = express();
 const port = 3000;
@@ -76,6 +77,60 @@ app.post('/api/login', (req, res) => {
             // Usuario no encontrado, redirigir a la página de inicio de sesión con un mensaje de error
             res.redirect('/?error=Nombre de usuario o contraseña incorrectos');
         }
+    });
+});
+
+// Ruta para manejar el registro de huéspedes
+app.post('/api/huespedes', (req, res) => {
+    const nuevoHuesped = req.body;
+    agregarHuesped(nuevoHuesped, (err, results) => {
+        if (err) {
+            return res.status(500).send('Error al agregar huésped');
+        }
+        res.status(200).json(results);
+    });
+});
+
+// Ruta para buscar huéspedes por documento
+app.get('/api/huespedes/:documento', (req, res) => {
+    const documento = req.params.documento;
+    buscarHuesped(documento, (err, results) => {
+        if (err) {
+            return res.status(500).send('Error al buscar huésped');
+        }
+        res.status(200).json(results);
+    });
+});
+
+// Ruta para obtener un huésped por ID
+app.get('/api/huespedes/:id', (req, res) => {
+    const id = req.params.id;
+    buscarHuesped(id, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error al buscar el huésped' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Huésped no encontrado' });
+        }
+        res.json(results);
+    });
+});
+
+// Ruta para actualizar un huésped por ID
+app.put('/api/huespedes/:id', (req, res) => {
+    const id = req.params.id;
+    const updatedHuesped = req.body;
+    console.log('Solicitud de actualización recibida para ID:', id);
+    console.log('Datos actualizados del huésped:', updatedHuesped);
+    actualizarHuesped(id, updatedHuesped, (err, results) => {
+        if (err) {
+            console.error('Error al actualizar el huésped:', err);
+            return res.status(500).json({ message: 'Error al actualizar el huésped', error: err });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Huésped no encontrado' });
+        }
+        res.json({ message: 'Huésped actualizado exitosamente', results });
     });
 });
 

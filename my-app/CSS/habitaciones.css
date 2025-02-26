@@ -313,7 +313,7 @@ color: var(--link-color-active);
 }
 .view-btn:not(.active):hover {
 background-color: var(--link-color-hover);
-color: var(--link-color-active);
+color: var (--link-color-active);
 }
 .messages-section {
 flex-shrink: 0;
@@ -1101,4 +1101,17 @@ footer {
 .navbar-toggle svg path {
     stroke: var(--main-color); /* Usa la variable para el color de las líneas */
 }
+
+.app-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease; /* Añade una transición suave */
+}
+
+.app-sidebar.hidden {
+    display: none; /* Oculta la barra de navegación */
+}
+
+/* ...existing code... */
 

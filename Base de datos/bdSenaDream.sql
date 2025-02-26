@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS hoteleria;
-USE hoteleria;
+USE hoteleria;	
 
 CREATE TABLE IF NOT EXISTS hotel(
     nit BIGINT NOT NULL PRIMARY KEY,
@@ -33,15 +33,14 @@ CREATE TABLE IF NOT EXISTS aprendiz(
 
 CREATE TABLE IF NOT EXISTS huesped(
     id BIGINT NOT NULL PRIMARY KEY,
-    idAdministrador BIGINT NOT NULL,
+    idAdministrador BIGINT,
     tipoDocumento VARCHAR(255) NOT NULL,
-    nombreCompleto VARCHAR(255) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    apellido VARCHAR(255) NOT NULL,
     telefono BIGINT NOT NULL,
     fechaNacimiento DATE NOT NULL,
-    ciudad VARCHAR(255) NOT NULL,
-    direccion VARCHAR(255) NOT NULL,
-    correoElectronico VARCHAR(255),
-    contactoEmergencia BIGINT NOT NULL,
+    contactoEmergencia VARCHAR(255) NOT NULL,
+    telefonoEmergencia BIGINT NOT NULL,
     FOREIGN KEY(idAdministrador) REFERENCES administrador(id)
 );
 

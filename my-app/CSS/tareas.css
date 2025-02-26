@@ -638,10 +638,6 @@ top: 58px;
 background-color: var(--message-btn);
 border: none;
 color: var(--main-color);
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 4px;
 display: none;
 }
 @media screen and (max-width: 980px) {
@@ -1044,6 +1040,15 @@ footer {
 
 .navbar-toggle svg path {
     stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+.hidden {
+    display: none;
+}
+
+.dark-mode .navbar-toggle svg {
+    fill: white;
+    stroke: white;
 }
 
 

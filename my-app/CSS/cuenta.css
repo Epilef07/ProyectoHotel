@@ -202,6 +202,10 @@ padding: 40px 16px;
 display: flex;
 flex-direction: column;
 align-items: center;
+transition: all 0.3s ease; /* Añade una transición suave */
+}
+.app-sidebar.hidden {
+display: none; /* Oculta la barra de navegación */
 }
 .app-sidebar-link {
 color: var(--main-color);
@@ -639,10 +643,6 @@ top: 58px;
 background-color: var(--message-btn);
 border: none;
 color: var(--main-color);
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 4px;
 display: none;
 }
 .tab-buttons {
@@ -881,7 +881,38 @@ footer {
     color: var(--secondary-color);
 }
 
+.navbar {
+    display: none; /* Ocultar por defecto */
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--projects-section);
+    width: 100%;
+    padding: 10px 0;
+}
 
+.navbar.show {
+    display: flex; /* Mostrar cuando se active */
+}
+
+.navbar-toggle {
+    background-color: var(--projects-section); /* Usa la variable para el fondo */
+    border: none;
+    padding: 10px;
+    border-radius: 8px; /* Añade bordes redondeados */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggle svg {
+    fill: var(--main-color); /* Usa la variable para el color de las líneas */
+    stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+.navbar-toggle svg path {
+    stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
 
 @media screen and (max-width: 980px) {
 .project-boxes.jsGridView .project-box-wrapper {

@@ -201,6 +201,10 @@ padding: 40px 16px;
 display: flex;
 flex-direction: column;
 align-items: center;
+transition: all 0.3s ease; /* Añade una transición suave */
+}
+.app-sidebar.hidden {
+display: none; /* Oculta la barra de navegación */
 }
 .app-sidebar-link {
 color: var(--main-color);
