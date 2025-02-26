@@ -49,6 +49,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var logoutOption = document.querySelector('.logout-option');
     profileBtn.addEventListener('click', function () {
         logoutOption.classList.toggle('show');
+        if (document.documentElement.classList.contains('dark')) {
+            logoutOption.style.backgroundColor = 'black';
+            logoutOption.style.color = 'white';
+        } else {
+            logoutOption.style.backgroundColor = 'white';
+            logoutOption.style.color = 'black';
+        }
     });
 
     // Obtener el modal
@@ -118,4 +125,10 @@ document.addEventListener('DOMContentLoaded', function () {
             profileDropdown.style.display = "none";
         }
     }
+
+    // Alternar entre modo oscuro y claro
+    document.querySelector('.mode-switch').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    });
 });

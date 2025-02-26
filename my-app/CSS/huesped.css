@@ -18,12 +18,14 @@ box-sizing: border-box;
 --more-list-shadow: rgba(209, 209, 209, 0.4);
 --button-bg: #1f1c24;
 --search-area-bg: #fff;
---star: #1ff1c2 e;
+--star: #1ff1c2e;
 --message-btn: #fff;
+--chevron-color: black;
+--logout-bg: white;
+--logout-color: black;
 }
-.dark:root {
+.dark-mode {
 --app-container: #1f1d2b;
---app-container: #111827;
 --main-color: #fff;
 --secondary-color: rgba(255, 255, 255, .8);
 --projects-section: #1f2937;
@@ -40,6 +42,9 @@ box-sizing: border-box;
 --more-list-bg-hover: rgba(195, 207, 244, 0.1);
 --more-list-shadow: rgba(195, 207, 244, 0.1);
 --message-btn: rgba(195, 207, 244, 0.1);
+--chevron-color: white;
+--logout-bg: black;
+--logout-color: white;
 }
 html, body {
 width: 100%;
@@ -833,6 +838,8 @@ footer {
     color: #fff;
 }
 
+
+
 @media screen and (max-width: 980px) {
 .project-boxes.jsGridView .project-box-wrapper {
 width: 50%;
@@ -965,3 +972,165 @@ right: 2px;
 top: 10px;
 }
 }
+.profile-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logout-option {
+    display: none;
+    position: absolute;
+    background-color: var(--logout-bg);
+    color: var(--logout-color);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.logout-option a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.logout-option a:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-container.show .logout-option {
+    display: block;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    background-color: var(--projects-section); /* Usa la variable para el fondo */
+    min-width: 120px; /* Ajusta el ancho mínimo */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    padding: 5px; /* Ajusta el padding para mayor comodidad */
+    border-radius: 8px; /* Añade bordes redondeados */
+    right: 10px; /* Aleja el cuadro de la derecha */
+}
+
+.profile-dropdown li {
+    color: black;
+    background-color: var(--projects-section);
+    padding: 8px 12px; /* Ajusta el padding para mayor comodidad */
+    text-decoration: none;
+    display: flex; /* Cambia a flex para alinear horizontalmente */
+    align-items: center; /* Alinea verticalmente en el centro */
+}
+
+
+.profile-container.show .profile-dropdown {
+    display: block;
+}
+
+.profile-dropdown li a {
+    color: var(--logout-color);
+    display: flex; /* Cambia a flex para alinear horizontalmente */
+    align-items: center; /* Alinea verticalmente en el centro */
+    padding: 8px 12px; /* Ajusta el padding para mayor comodidad */
+    border-radius: 8px; /* Añade bordes redondeados */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+.dark .logout-option {
+    background-color: black;
+    color: white;
+}
+
+.light-mode .logout-option {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode {
+    --main-color: #fff;
+    --secondary-color: rgba(255, 255, 255, .8);
+    --projects-section: #1f2937;
+    --link-color: rgba(255, 255, 255, .8);
+    --link-color-hover: rgba(195, 207, 244, 0.1);
+    --link-color-active-bg: rgba(195, 207, 244, 0.2);
+    --button-bg: #1f2937;
+    --search-area-bg: #1f2937;
+    --message-box-hover: #243244;
+    --message-box-border: rgba(255, 255, 255, .1);
+    --star: #ffd92c;
+    --light-font: rgba(255, 255, 255, .8);
+    --more-list-bg: #2f3142;
+    --more-list-bg-hover: rgba(195, 207, 244, 0.1);
+    --more-list-shadow: rgba(195, 207, 244, 0.1);
+    --message-btn: rgba(195, 207, 244, 0.1);
+    --chevron-color: white;
+    --logout-bg: black;
+    --logout-color: white;
+}
+
+.bi-chevron-down {
+    fill: var(--chevron-color);
+}
+
+.profile-dropdown li a {
+    color: var(--logout-color);
+    background-color: var(--logout-color);
+    display: flex; /* Cambia a flex para alinear horizontalmente */
+    align-items: center; /* Alinea verticalmente en el centro */
+    padding: 10px 20px; /* Añade padding para mayor comodidad */
+    border-radius: 8px; /* Añade bordes redondeados */
+}
+
+.dark-mode .bi-chevron-down {
+    fill: white;
+}
+
+.light-mode .bi-chevron-down {
+    fill: black;
+}
+
+.dark-mode .profile-dropdown li a {
+    color: var(--main-color);
+    background-color: var(--projects-section);
+}
+
+.light-mode .profile-dropdown li a {
+    color: var(--main-color);
+    background-color: var(--projects-section);
+}
+
+.bi-chevron-down {
+    fill: var(--chevron-color);
+}
+
+.profile-dropdown li a {
+    color: var(--main-color);
+    background-color: var(--projects-section);
+    display: flex; /* Cambia a flex para alinear horizontalmente */
+    align-items: center; /* Alinea verticalmente en el centro */
+    padding: 8px 12px; /* Ajusta el padding para mayor comodidad */
+    border-radius: 8px; /* Añade bordes redondeados */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+.navbar-toggle {
+    background-color: var(--projects-section); /* Usa la variable para el fondo */
+    border: none;
+    padding: 10px;
+    border-radius: 8px; /* Añade bordes redondeados */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggle svg {
+    fill: var(--main-color); /* Usa la variable para el color de las líneas */
+    stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+.navbar-toggle svg path {
+    stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+

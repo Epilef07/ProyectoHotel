@@ -48,7 +48,7 @@ app.post('/api/register', (req, res) => {
             return res.status(500).json({ success: false, message: 'Error al registrar aprendiz' });
         }
         console.log('Aprendiz registrado exitosamente:', results);
-        res.redirect('/'); // Redirigir a la página de inicio después de un registro exitoso
+        res.redirect('/HTML/index.html'); // Redirigir a la página de inicio después de un registro exitoso
     });
 });
 

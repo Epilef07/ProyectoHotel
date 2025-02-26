@@ -66,3 +66,38 @@ body{
   display: none;
 }
 
+.logout-option {
+    display: none;
+    position: absolute;
+    background-color: var(--logout-bg);
+    color: var(--logout-color);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.logout-option a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.logout-option a:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-container.show .logout-option {
+    display: block;
+}
+
+.dark .logout-option {
+    background-color: black;
+    color: white;
+}
+
+.light-mode .logout-option {
+    background-color: white;
+    color: black;
+}
+

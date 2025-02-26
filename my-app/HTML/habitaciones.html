@@ -8,35 +8,53 @@
     <link rel="shortcut icon" href="/IMAGENES/iconSena.png">
     <link rel="stylesheet" href="/CSS/habitaciones.css">
 </head>
-<body style="padding-bottom: 0px;">
+<body class="light-mode" style="padding-bottom: 0px;">
     <!--todo este es el encabezado -->
     <div class="app-container">
         <div class="app-header">
         <div class="app-header-left">
+            <button class="navbar-toggle" id="navbar-toggle" title="Toggle Navbar">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         <a href="https://oferta.senasofiaplus.edu.co/sofia-oferta/" target="_blank">
             <img src="/IMAGENES/iconSena.png" style="height: 50px; border-radius: 20px" url="https://oferta.senasofiaplus.edu.co/sofia-oferta/" alt="icono sena">
         </a>
         <p class="app-name" >SENA DREAM</p>
         </div>
         <div class="app-header-right">
-        <button class="mode-switch" title="Switch Theme">
-        <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
-        <defs></defs>
-        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-        </svg>
-        </button>
-        <button class="profile-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-        <span>ADMIN</span>
-        </button>
+            <button class="mode-switch" title="Switch Theme">
+                <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                </svg>
+            </button>
+            <div class="profile-container">
+                <button class="profile-btn" id="profile-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>ADMIN</span>
+                    <svg id="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+                <ul class="profile-dropdown" id="profile-dropdown">
+                    <li><a href="/index.html">Cerrar Sesión</a></li>
+                </ul>
+                <script>
+                    document.getElementById('profile-btn').addEventListener('click', function() {
+                        var dropdown = document.getElementById('profile-dropdown');
+                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                    });
+                </script>
+            </div>
         </div>
         </div>
         <!--Aqui es el iconos de navegar-->
         <!--Aqui es el icono de la casa-->
         <div class="app-content">
-        <div class="app-sidebar">
+        <div class="app-sidebar" id="app-sidebar">
         <a href="/HTML/menu.html" class="app-sidebar-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -129,5 +147,18 @@
         </div>     
     </div>
     <script src="/JS/habitaciones.js"></script>
+    <script>
+        // Alternar entre modo oscuro y claro
+        document.querySelector('.mode-switch').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+        });
+
+        // Alternar visibilidad de la barra de navegación
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            var sidebar = document.getElementById('app-sidebar');
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>
