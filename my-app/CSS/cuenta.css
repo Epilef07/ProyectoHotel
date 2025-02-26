@@ -236,6 +236,10 @@ flex-direction: column;
 min-height: calc(100vh - 150px); /* Ajustar la altura mínima para que el contenido no se tape con el footer */
 width: 100%;
 }
+.projects-section.scrollable {
+    overflow-y: auto;
+    max-height: calc(100vh - 150px); /* Ajustar la altura máxima para que el contenido no se tape con el footer */
+}
 .projects-section-line {
 display: flex;
 justify-content: space-between;

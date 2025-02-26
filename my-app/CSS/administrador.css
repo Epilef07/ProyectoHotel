@@ -66,7 +66,8 @@ cursor: pointer;
 width: 100%;
 display: flex;
 flex-direction: column;
-height: 100%;
+height: 100vh;
+overflow-y: auto;
 background-color: var(--app-container);
 transition: 0.2s;
 max-width: 100%;
@@ -234,6 +235,10 @@ display: flex;
 flex-direction: column;
 min-height: calc(100vh - 150px); /* Ajustar la altura mínima para que el contenido no se tape con el footer */
 width: 100%;
+}
+.projects-section.scrollable {
+    overflow-y: auto;
+    max-height: calc(100vh - 150px); /* Ajustar la altura máxima para que el contenido no se tape con el footer */
 }
 .projects-section-line {
 display: flex;
@@ -638,10 +643,6 @@ top: 58px;
 background-color: var(--message-btn);
 border: none;
 color: var(--main-color);
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 4px;
 display: none;
 }
 .tab-buttons {
@@ -1348,6 +1349,38 @@ top: 10px;
 
 .navbar-toggle svg path {
     stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+.scroll-button {
+    position: fixed;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#scroll-up {
+    bottom: 80px;
+}
+
+#scroll-down {
+    bottom: 20px;
+}
+
+.scroll-bar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background-color: #007bff;
+    cursor: pointer;
+    z-index: 1000;
 }
 
 
