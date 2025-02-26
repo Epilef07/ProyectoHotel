@@ -246,6 +246,10 @@ flex-direction: column;
 min-height: calc(100vh - 150px); /* Ajustar la altura mínima para que el contenido no se tape con el footer */
 width: 100%;
 }
+.projects-section.scrollable {
+    overflow-y: auto;
+    max-height: calc(100vh - 150px); /* Ajustar la altura máxima para que el contenido no se tape con el footer */
+}
 .projects-section-line {
 display: flex;
 justify-content: space-between;
@@ -649,10 +653,6 @@ top: 58px;
 background-color: var(--message-btn);
 border: none;
 color: var(--main-color);
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 4px;
 display: none;
 }
 .tab-buttons {
@@ -843,9 +843,9 @@ footer {
 
 .reservas-btn {
     position: fixed;
-    bottom: 60px; /* Subir el botón más arriba del footer */
+    bottom: 20px; /* Ajustar la posición del botón */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Centrar el botón horizontalmente */
     background-color: green;
     color: white;
     padding: 15px 30px;
@@ -854,7 +854,6 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     z-index: 1000;
-    margin-bottom: 200px
 }
 .reservas-btn:hover {
     background-color: darkgreen;

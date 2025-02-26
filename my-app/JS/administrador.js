@@ -131,4 +131,21 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.toggle('dark-mode');
         document.body.classList.toggle('light-mode');
     });
+
+    // Desplazamiento con el teclado
+    document.addEventListener('keydown', function(event) {
+        console.log('Tecla presionada:', event.key);
+        var appContainer = document.querySelector('.app-container');
+        if (event.key === 'ArrowUp') {
+            appContainer.scrollBy({
+                top: -100,
+                behavior: 'smooth'
+            });
+        } else if (event.key === 'ArrowDown') {
+            appContainer.scrollBy({
+                top: 100,
+                behavior: 'smooth'
+            });
+        }
+    });
 });
