@@ -3,12 +3,14 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const connection = require('./dbConnection');
 const { agregarHuesped, buscarHuesped, actualizarHuesped } = require('./crudHuespedes');
+const { agregarTarea, obtenerTareas, actualizarTarea, eliminarTarea } = require('./crudTareas');
+const { agregarReserva } = require('./reservaciones'); // Ruta corregida
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); // Asegúrate de que esto esté presente
 
 // Servir archivos estáticos desde las diferentes carpetas
 app.use(express.static(path.join(__dirname, '../my-app/HTML')));
@@ -131,6 +133,75 @@ app.put('/api/huespedes/:id', (req, res) => {
             return res.status(404).json({ message: 'Huésped no encontrado' });
         }
         res.json({ message: 'Huésped actualizado exitosamente', results });
+    });
+});
+
+// Ruta para agregar una tarea
+app.post('/api/tareas', (req, res) => {
+    const nuevaTarea = { descripcion: req.body.descripcion };
+    agregarTarea(nuevaTarea, (err, results) => {
+        if (err) {
+            console.error('Error al agregar la tarea:', err);
+            return res.status(500).json({ success: false, message: 'Error al agregar la tarea' });
+        }
+        res.json({ success: true, message: 'Tarea agregada exitosamente', results });
+    });
+});
+
+// Ruta para obtener todas las tareas
+app.get('/api/tareas', (req, res) => {
+    obtenerTareas((err, results) => {
+        if (err) {
+            console.error('Error al obtener las tareas:', err);
+            return res.status(500).json({ success: false, message: 'Error al obtener las tareas' });
+        }
+        res.json(results);
+    });
+});
+
+// Ruta para actualizar una tarea
+app.put('/api/tareas/:id', (req, res) => {
+    const id = req.params.id;
+    const tareaActualizada = { descripcion: req.body.descripcion };
+    actualizarTarea(id, tareaActualizada, (err, results) => {
+        if (err) {
+            console.error('Error al actualizar la tarea:', err);
+            return res.status(500).json({ success: false, message: 'Error al actualizar la tarea' });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Tarea no encontrada' });
+        }
+        res.json({ success: true, message: 'Tarea actualizada exitosamente', results });
+    });
+});
+
+// Ruta para eliminar una tarea
+app.delete('/api/tareas/:id', (req, res) => {
+    const id = req.params.id;
+    eliminarTarea(id, (err, results) => {
+        if (err) {
+            console.error('Error al eliminar la tarea:', err);
+            return res.status(500).json({ success: false, message: 'Error al eliminar la tarea' });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Tarea no encontrada' });
+        }
+        res.json({ success: true, message: 'Tarea eliminada exitosamente', results });
+    });
+});
+
+// Ruta para agregar una reserva
+app.post('/api/reservas', (req, res) => {
+    const reserva = req.body;
+    console.log('Datos de la reserva recibidos:', reserva); // Verificar los datos recibidos
+
+    agregarReserva(reserva, (err, results) => {
+        if (err) {
+            console.error('Error al agregar la reserva:', err.message);
+            return res.status(500).json({ success: false, message: 'Error al agregar la reserva' ,error: err});
+        }
+        console.log('Reserva agregada correctamente');
+        res.json({ success: true, message: 'Reserva agregada correctamente', results });
     });
 });
 

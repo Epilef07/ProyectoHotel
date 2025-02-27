@@ -47,32 +47,32 @@ CREATE TABLE IF NOT EXISTS huesped(
 CREATE TABLE IF NOT EXISTS habitacion(
     numeroHabitacion SMALLINT NOT NULL PRIMARY KEY,
     nit BIGINT NOT NULL,
-    camas SMALLINT NOT NULL,
-    sabana SMALLINT NOT NULL,
-    sobreSabana SMALLINT NOT NULL,
-    almohada SMALLINT NOT NULL,
-    cobija SMALLINT NOT NULL,
-    cobertor SMALLINT NOT NULL,
-    fular SMALLINT NOT NULL,
-    cojin SMALLINT NOT NULL,
-    toallaCuerpo SMALLINT NOT NULL,
-    toallaCara SMALLINT NOT NULL,
+    ocupada BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY(nit) REFERENCES hotel(nit)
 );
 
 CREATE TABLE IF NOT EXISTS reserva(
     codigoReserva BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idAdministrador BIGINT NOT NULL,
-    idAprendiz BIGINT NOT NULL,
+    idAdministrador BIGINT ,
+    idAprendiz BIGINT ,
     numeroHabitacion SMALLINT NOT NULL,
     idHuesped BIGINT NOT NULL,
-    tarifa SMALLINT NOT NULL,
-    cantidadDias BIGINT NOT NULL,
+    fechaIngreso DATE NOT NULL,
+    fechaSalida DATE NOT NULL,
     abono SMALLINT,
     FOREIGN KEY(idAdministrador) REFERENCES administrador(id),
     FOREIGN KEY(idAprendiz) REFERENCES aprendiz(id),
     FOREIGN KEY(numeroHabitacion) REFERENCES habitacion(numeroHabitacion),
     FOREIGN KEY(idHuesped) REFERENCES huesped(id)
+);
+
+CREATE TABLE IF NOT EXISTS tareas(
+id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+idAdministrador BIGINT NOT NULL ,
+idAprendiz BIGINT NOT NULL ,
+descripcion VARCHAR(255),
+FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
+FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
 );
 
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -84,15 +84,4 @@ CREATE TABLE IF NOT EXISTS usuarios (
     idAprendiz BIGINT, -- ID del aprendiz
     FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
     FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
-);
-CREATE TABLE IF NOT EXISTS permisos (
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL UNIQUE -- Nombre del permiso (ej: 'crear_reserva', 'editar_huesped')
-);
-
-CREATE TABLE IF NOT EXISTS rol_permisos (
-    idRol VARCHAR(50) NOT NULL, -- Rol (admin o user)
-    idPermiso BIGINT NOT NULL,  -- Permiso asignado
-    PRIMARY KEY (idRol, idPermiso),
-    FOREIGN KEY (idPermiso) REFERENCES permisos(id)
 );

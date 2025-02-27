@@ -110,11 +110,13 @@
                                     </div>
                                     <div class="table-responsive p-5 bg-body border rounded">
                                         <div class="task">
-                                            <input type="text" placeholder="Agregar una nueva tarea..." id="newTask" class="task-input">
-                                            <button id="btnnewTask" class="task-button">Agregar</button>
+                                            <form id="task-form">
+                                                <input type="text" placeholder="Agregar una nueva tarea..." id="newTask" class="task-input" required>
+                                                <button type="submit" id="btnnewTask" class="task-button">Agregar</button>
+                                            </form>
                                         </div>
                                         <hr>
-                                        <div id="projects-section-header" class="task-list">
+                                         <div id="task-list" class="task-list">
                                             Aquí se agregan las tareas 
                                         </div>
                                     </div>
@@ -151,6 +153,134 @@
             var sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('hidden');
         });
+        
+        document.getElementById('task-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const taskInput = document.getElementById('newTask');
+            const task = taskInput.value;
+
+            fetch('/api/tareas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ descripcion: task })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    agregarTareaALaLista(data.results.insertId, task);
+                    taskInput.value = '';
+                } else {
+                    console.error('Error al agregar la tarea:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function agregarTareaALaLista(id, descripcion) {
+            const taskList = document.getElementById('task-list');
+            const taskItem = document.createElement('div');
+            taskItem.classList.add('task-item');
+            taskItem.setAttribute('data-id', id);
+
+            const taskDescription = document.createElement('span');
+            taskDescription.textContent = descripcion;
+            taskItem.appendChild(taskDescription);
+
+            const updateButton = document.createElement('button');
+            updateButton.textContent = 'Actualizar';
+            updateButton.classList.add('update-button');
+            updateButton.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = descripcion;
+                input.classList.add('edit-input');
+                taskItem.replaceChild(input, taskDescription);
+
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Guardar';
+                saveButton.classList.add('save-button');
+                saveButton.addEventListener('click', function() {
+                    const nuevaDescripcion = input.value;
+                    actualizarTarea(id, nuevaDescripcion, taskDescription, input, saveButton, updateButton);
+                });
+                taskItem.replaceChild(saveButton, updateButton);
+            });
+            taskItem.appendChild(updateButton);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.classList.add('delete-button');
+            deleteButton.addEventListener('click', function() {
+                eliminarTarea(id, taskItem);
+            });
+            taskItem.appendChild(deleteButton);
+
+            taskList.appendChild(taskItem);
+        }
+
+        function actualizarTarea(id, nuevaDescripcion, taskDescriptionElement, inputElement, saveButtonElement, updateButtonElement) {
+            fetch(`/api/tareas/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ descripcion: nuevaDescripcion })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    taskDescriptionElement.textContent = nuevaDescripcion;
+                    const taskItem = inputElement.parentElement;
+                    taskItem.replaceChild(taskDescriptionElement, inputElement);
+                    taskItem.replaceChild(updateButtonElement, saveButtonElement);
+                } else {
+                    console.error('Error al actualizar la tarea:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function eliminarTarea(id, taskItemElement) {
+            fetch(`/api/tareas/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    taskItemElement.remove();
+                } else {
+                    console.error('Error al eliminar la tarea:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Función para cargar las tareas existentes
+        function cargarTareas() {
+            fetch('/api/tareas')
+            .then(response => response.json())
+            .then(data => {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = ''; // Limpiar la lista de tareas
+                data.forEach(tarea => {
+                    agregarTareaALaLista(tarea.id, tarea.descripcion);
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar las tareas:', error);
+            });
+        }
+
+        // Cargar las tareas al cargar la página
+        window.onload = cargarTareas;
     </script>
 </body>
 </html>

@@ -21,12 +21,18 @@ document.addEventListener('DOMContentLoaded', function () {
         listView.classList.add('active');
         projectsList.classList.remove('jsGridView');
         projectsList.classList.add('jsListView');
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
     });
     gridView.addEventListener('click', function () {
         gridView.classList.add('active');
         listView.classList.remove('active');
         projectsList.classList.remove('jsListView');
         projectsList.classList.add('jsGridView');
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
     });
     document.querySelector('.messages-btn').addEventListener('click', function () {
         document.querySelector('.messages-section').classList.add('show');

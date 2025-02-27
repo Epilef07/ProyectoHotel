@@ -1,33 +1,55 @@
 document.addEventListener('DOMContentLoaded', function () {
     var modeSwitch = document.querySelector('.mode-switch');
     var isDarkMode = localStorage.getItem('darkMode') === 'true';
-
-    if (isDarkMode) {
-        document.documentElement.classList.add('dark');
-        modeSwitch.classList.add('active');
-    }
-
-    modeSwitch.addEventListener('click', function () {
-        document.documentElement.classList.toggle('dark');
-        modeSwitch.classList.toggle('active');
-        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-    });
-
     var listView = document.querySelector('.list-view');
     var gridView = document.querySelector('.grid-view');
     var projectsList = document.querySelector('.project-boxes');
+    var isListView = localStorage.getItem('listView') === 'true';
+
+    if (isDarkMode) {
+        document.documentElement.classList.add('dark-mode');
+        document.documentElement.classList.remove('light-mode');
+        modeSwitch.classList.add('active');
+    } else {
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.classList.remove('dark-mode');
+    }
+
+    if (isListView) {
+        gridView.classList.remove('active');
+        listView.classList.add('active');
+        projectsList.classList.remove('jsGridView');
+        projectsList.classList.add('jsListView');
+    } else {
+        gridView.classList.add('active');
+        listView.classList.remove('active');
+        projectsList.classList.remove('jsListView');
+        projectsList.classList.add('jsGridView');
+    }
+
+    modeSwitch.addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark-mode');
+        document.documentElement.classList.toggle('light-mode');
+        modeSwitch.classList.toggle('active');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+    });
+
     listView.addEventListener('click', function () {
         gridView.classList.remove('active');
         listView.classList.add('active');
         projectsList.classList.remove('jsGridView');
         projectsList.classList.add('jsListView');
+        localStorage.setItem('listView', true);
     });
+
     gridView.addEventListener('click', function () {
         gridView.classList.add('active');
         listView.classList.remove('active');
         projectsList.classList.remove('jsListView');
         projectsList.classList.add('jsGridView');
+        localStorage.setItem('listView', false);
     });
+
     document.querySelector('.messages-btn').addEventListener('click', function () {
         document.querySelector('.messages-section').classList.add('show');
     });
@@ -49,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var logoutOption = document.querySelector('.logout-option');
     profileBtn.addEventListener('click', function () {
         logoutOption.classList.toggle('show');
-        if (document.documentElement.classList.contains('dark')) {
+        if (document.documentElement.classList.contains('dark-mode')) {
             logoutOption.style.backgroundColor = 'black';
             logoutOption.style.color = 'white';
         } else {
@@ -128,7 +150,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Alternar entre modo oscuro y claro
     document.querySelector('.mode-switch').addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        document.body.classList.toggle('light-mode');
+        document.documentElement.classList.toggle('dark-mode');
+        document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
     });
 });

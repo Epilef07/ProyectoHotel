@@ -313,7 +313,7 @@ transition: 0.2s;
 }
 .view-btn.active {
 background-color: var(--link-color-active-bg);
-color: var(--link-color-active);
+color: var (--link-color-active);
 }
 .view-btn:not(.active):hover {
 background-color: var(--link-color-hover);
@@ -1115,6 +1115,11 @@ footer {
 
 .app-sidebar.hidden {
     display: none; /* Oculta la barra de navegación */
+}
+
+body.dark-mode {
+    background-color: var(--app-container);
+    color: var(--main-color);
 }
 
 /* ...existing code... */

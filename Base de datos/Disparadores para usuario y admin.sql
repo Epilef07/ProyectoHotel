@@ -41,6 +41,9 @@ END$$
 DELIMITER ;
 
 INSERT INTO hotel (nit,nombre,telefono,direccion) VALUES (11,"Hotel Sena",3105554320,"Carrera 27");
+INSERT INTO habitacion (numeroHabitacion, nit, ocupada) VALUES (501, 11, FALSE);
+INSERT INTO habitacion (numeroHabitacion, nit, ocupada) VALUES (502, 11, FALSE);
+INSERT INTO habitacion (numeroHabitacion, nit, ocupada) VALUES (503, 11, FALSE);
 INSERT INTO administrador(
     id, 
     nit, 
@@ -77,4 +80,5 @@ INSERT INTO aprendiz (
     'carlos@example.com', 
     NOW()
 );
+
 SELECT * FROM usuarios;

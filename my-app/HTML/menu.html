@@ -127,24 +127,16 @@
                         <span class="close">&times;</span>
                         <h2>Reservas</h2>
                         <form id="reservaForm">
-                            <label for="tipo-id">Tipo de Identificación:</label>
-                            <select id="tipo-id" name="tipo-id" required>
-                                <option value="cc">Cédula de Ciudadanía</option>
-                                <option value="ti">Tarjeta de Identidad</option>
-                                <option value="ce">Cédula de Extranjería</option>
-                                <option value="pep">PEP</option>
-                                <option value="ppt">Permiso por Protección Temporal</option>
-                            </select>
-                            <label for="num-doc">Número de Documento:</label>
-                            <input type="number" id="num-doc" name="num-doc" placeholder="Número de Documento" required>
-                            <label for="nombre">Nombre y Apellido:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Nombre y Apellido" pattern="[A-Za-z\s]+" title="Solo se permiten letras y espacios" required>
-                            <label for="cantidad-abono">Cantidad de Abono:</label>
-                            <input type="number" id="cantidad-abono" name="cantidad-abono" placeholder="Cantidad de Abono">
+                            <label for="numero-habitacion">Número de Habitación:</label>
+                            <input type="number" id="numero-habitacion" name="numero-habitacion" required>
+                            <label for="id-huesped">ID Huésped:</label>
+                            <input type="number" id="id-huesped" name="id-huesped" required>
                             <label for="fecha-ingreso">Fecha de Ingreso:</label>
                             <input type="date" id="fecha-ingreso" name="fecha-ingreso" required>
                             <label for="fecha-salida">Fecha de Salida:</label>
                             <input type="date" id="fecha-salida" name="fecha-salida" required>
+                            <label for="abono">Abono:</label>
+                            <input type="number" id="abono" name="abono">
                             <button type="submit">Enviar</button>
                         </form>
                     </div>
@@ -189,14 +181,69 @@
 
         // Alternar entre modo oscuro y claro
         document.querySelector('.mode-switch').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
+            document.documentElement.classList.toggle('dark-mode');
+            document.documentElement.classList.toggle('light-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
         });
 
         // Alternar visibilidad de la barra de navegación
         document.getElementById('navbar-toggle').addEventListener('click', function() {
             var sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('hidden');
+        });
+
+        // Mantener el modo oscuro al cambiar de vista
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.classList.remove('light-mode');
+        } else {
+            document.documentElement.classList.add('light-mode');
+            document.documentElement.classList.remove('dark-mode');
+        }
+
+        document.getElementById('reservaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const numeroHabitacion = document.getElementById('numero-habitacion').value;
+            const idHuesped = document.getElementById('id-huesped').value;
+            const fechaIngreso = document.getElementById('fecha-ingreso').value;
+            const fechaSalida = document.getElementById('fecha-salida').value;
+            const abono = document.getElementById('abono').value;
+
+            const reserva = {
+                numeroHabitacion,
+                idHuesped,
+                fechaIngreso,
+                fechaSalida,
+                abono
+            };
+
+            console.log('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
+
+            fetch('/api/reservas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reserva)
+            })
+            .then(response => {
+                console.log('Respuesta del servidor:', response); // Agregar log para depuración
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos del servidor:', data); // Agregar log para depuración
+                if (data.success) {
+                    alert('Reserva realizada exitosamente');
+                    modal.style.display = 'none';
+                } else {
+                    alert('Error al realizar la reserva: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al realizar la reserva');
+            });
         });
     </script>
 </body>
