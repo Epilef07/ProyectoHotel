@@ -132,4 +132,65 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.toggle('dark-mode');
         document.body.classList.toggle('light-mode');
     });
+
+    // Función para abrir el modal de la imagen
+    function openModal() {
+        document.getElementById('imageModal').style.display = 'block';
+    }
+
+    // Función para cerrar el modal de la imagen
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    // Función para mostrar la imagen actual en el modal
+    function showImage(n) {
+        var slides = document.getElementsByClassName('modal-slide');
+        if (n >= slides.length) { currentSlide = 0; }
+        if (n < 0) { currentSlide = slides.length - 1; }
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].style.display = 'none';
+        }
+        slides[currentSlide].style.display = 'block';
+    }
+
+    var currentSlide = 0;
+
+    // Añadir evento de clic a las imágenes del carrusel
+    var images = document.querySelectorAll('.carousel-inner img');
+    images.forEach(function (image, index) {
+        image.addEventListener('click', function () {
+            currentSlide = index;
+            openModal();
+            showImage(currentSlide);
+        });
+    });
+
+    // Añadir evento de clic a los botones de navegación
+    document.getElementById('prev').addEventListener('click', function () {
+        showImage(--currentSlide);
+    });
+    document.getElementById('next').addEventListener('click', function () {
+        showImage(++currentSlide);
+    });
+
+    // Añadir evento de clic al botón de cerrar
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+
+    // Cerrar el modal al hacer clic fuera de la imagen
+    window.addEventListener('click', function (event) {
+        if (event.target == document.getElementById('imageModal')) {
+            closeModal();
+        }
+    });
+
+    // Mostrar solo la imagen activa en el primer carrusel
+    var firstCarouselItems = document.querySelectorAll('.carousel-inner .carousel-item');
+    firstCarouselItems.forEach(function (item, index) {
+        if (index === 0) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
 });
