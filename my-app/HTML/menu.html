@@ -20,19 +20,25 @@
                 </button>
                 <a href="https://oferta.senasofiaplus.edu.co/sofia-oferta/" target="_blank">
                     <img src="/IMAGENES/iconSena.png" style="height: 50px; border-radius: 20px" alt="icono sena">
+                    
                 </a>
                 <p class="app-name">SENA DREAM</p>
             </div>
             <div class="app-header-right">
-                <button class="mode-switch" title="Switch Theme">
+                <button class="mode-switch" title="Switch Theme" id=".mode-switch">
                     <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+
+
+
+                        
                     </svg>
                 </button>
                 <div class="profile-container">
                     <button class="profile-btn" id="profile-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 24 24">
                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            
                         </svg>
                         <span>ADMIN</span>
                         <svg id="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
@@ -128,16 +134,18 @@
                         <h2>Reservas</h2>
                         <form id="reservaForm">
                             <label for="numero-habitacion">Número de Habitación:</label>
-                            <input type="number" id="numero-habitacion" name="numero-habitacion" required>
+                            <input type="number" id="numeroHabitacion" name="numeroHabitacion" required>
                             <label for="id-huesped">ID Huésped:</label>
-                            <input type="number" id="id-huesped" name="id-huesped" required>
+                            <input type="number" id="idHuesped" name="idHuesped" required>
                             <label for="fecha-ingreso">Fecha de Ingreso:</label>
-                            <input type="date" id="fecha-ingreso" name="fecha-ingreso" required>
+                            <input type="date" id="fechaIngreso" name="fechaIngreso" required>
                             <label for="fecha-salida">Fecha de Salida:</label>
-                            <input type="date" id="fecha-salida" name="fecha-salida" required>
+                            <input type="date" id="fechaSalida" name="fechaSalida" required>
                             <label for="abono">Abono:</label>
                             <input type="number" id="abono" name="abono">
                             <button type="submit">Enviar</button>
+
+                            
                         </form>
                     </div>
                 </div>
@@ -147,6 +155,9 @@
     <script src="/JS/menu.js"></script>
 
     <script>
+        console.log('Cargando script de la vista de menú');
+      
+
         // Obtener el modal
         var modal = document.getElementById("mensajeModal");
 
@@ -159,6 +170,11 @@
         // Cuando el usuario hace clic en el botón, abre el modal
         btn.onclick = function() {
             modal.style.display = "block";
+            
+
+
+
+            
         }
 
         // Cuando el usuario hace clic en <span> (x), cierra el modal
@@ -181,6 +197,7 @@
 
         // Alternar entre modo oscuro y claro
         document.querySelector('.mode-switch').addEventListener('click', function() {
+            console.log('Alternando modo oscuro');
             document.documentElement.classList.toggle('dark-mode');
             document.documentElement.classList.toggle('light-mode');
             localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
@@ -190,6 +207,7 @@
         document.getElementById('navbar-toggle').addEventListener('click', function() {
             var sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('hidden');
+            console.log('Formulario enviado');
         });
 
         // Mantener el modo oscuro al cambiar de vista
@@ -200,51 +218,55 @@
             document.documentElement.classList.add('light-mode');
             document.documentElement.classList.remove('dark-mode');
         }
-
+        //Esta es la funcion para enviar los datos de la reserva
         document.getElementById('reservaForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+           event.preventDefault();
 
-            const numeroHabitacion = document.getElementById('numero-habitacion').value;
-            const idHuesped = document.getElementById('id-huesped').value;
-            const fechaIngreso = document.getElementById('fecha-ingreso').value;
-            const fechaSalida = document.getElementById('fecha-salida').value;
-            const abono = document.getElementById('abono').value;
+            const  numeroHabitacion = document.getElementById('numeroHabitacion').value; // Corregido el id
+            const idHuesped = document.getElementById('idHuesped').value;
+            const fechaIngreso = document.getElementById('fechaIngreso').value;
+            const fechaSalida = document.getElementById('fechaSalida').value;
+            const abono = document.getElementById('abono').value || 0;
+            
+        console.log(idHuesped); 
 
-            const reserva = {
-                numeroHabitacion,
-                idHuesped,
-                fechaIngreso,
-                fechaSalida,
-                abono
-            };
+        const reserva = {
+            numeroHabitacion,
+            idHuesped,
+            fechaIngreso,
+            fechaSalida,
+            abono
+        };
 
-            console.log('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
+        console.log('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
+        console.alert('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
 
-            fetch('/api/reservas', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(reserva)
-            })
-            .then(response => {
-                console.log('Respuesta del servidor:', response); // Agregar log para depuración
-                return response.json();
-            })
-            .then(data => {
-                console.log('Datos recibidos del servidor:', data); // Agregar log para depuración
-                if (data.success) {
-                    alert('Reserva realizada exitosamente');
-                    modal.style.display = 'none';
-                } else {
-                    alert('Error al realizar la reserva: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al realizar la reserva');
-            });
-        });
+        fetch('/api/reservas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reserva)
+        })
+        .then(response => {
+            console.log('Respuesta del servidor:', response); // Agregar log para depuración
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos recibidos del servidor:', data); // Agregar log para depuración
+        if (data.success) {
+            alert('Reserva realizada exitosamente');
+            modal.style.display = 'none';
+        } else {
+            alert('Error al realizar la reserva: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al realizar la reserva');
+    });
+    console.log('Formulario enviado');
+    });
     </script>
 </body>
 </html>
