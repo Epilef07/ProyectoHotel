@@ -16,24 +16,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (isListView) {
+        console.log(isListView); 
         gridView.classList.remove('active');
         listView.classList.add('active');
         projectsList.classList.remove('jsGridView');
         projectsList.classList.add('jsListView');
-    } else {
-        gridView.classList.add('active');
-        listView.classList.remove('active');
-        projectsList.classList.remove('jsListView');
-        projectsList.classList.add('jsGridView');
     }
-
+ // borre 
     modeSwitch.addEventListener('click', function () {
         document.documentElement.classList.toggle('dark-mode');
         document.documentElement.classList.toggle('light-mode');
         modeSwitch.classList.toggle('active');
         localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
     });
-
     listView.addEventListener('click', function () {
         gridView.classList.remove('active');
         listView.classList.add('active');
@@ -42,13 +37,15 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('listView', true);
     });
 
-    gridView.addEventListener('click', function () {
+    gridView.addEventListener('click', function () { 
         gridView.classList.add('active');
         listView.classList.remove('active');
         projectsList.classList.remove('jsListView');
         projectsList.classList.add('jsGridView');
         localStorage.setItem('listView', false);
     });
+
+    // borre av
 
     document.querySelector('.messages-btn').addEventListener('click', function () {
         document.querySelector('.messages-section').classList.add('show');

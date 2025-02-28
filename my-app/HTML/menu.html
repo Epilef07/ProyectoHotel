@@ -152,12 +152,10 @@
             </div>
         </div>
     </div>
-    <script src="/JS/menu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
-        console.log('Cargando script de la vista de menú');
-      
-
         // Obtener el modal
         var modal = document.getElementById("mensajeModal");
 
@@ -170,11 +168,7 @@
         // Cuando el usuario hace clic en el botón, abre el modal
         btn.onclick = function() {
             modal.style.display = "block";
-            
-
-
-
-            
+        
         }
 
         // Cuando el usuario hace clic en <span> (x), cierra el modal
@@ -189,11 +183,6 @@
             }
         }
 
-        // Evitar que se ingresen números o caracteres especiales en el campo de nombre
-        document.getElementById('nombre').addEventListener('input', function (e) {
-            var value = e.target.value;
-            e.target.value = value.replace(/[^A-Za-z\s]/g, '');
-        });
 
         // Alternar entre modo oscuro y claro
         document.querySelector('.mode-switch').addEventListener('click', function() {
@@ -220,53 +209,73 @@
         }
         //Esta es la funcion para enviar los datos de la reserva
         document.getElementById('reservaForm').addEventListener('submit', function(event) {
-           event.preventDefault();
+    event.preventDefault();
 
-            const  numeroHabitacion = document.getElementById('numeroHabitacion').value; // Corregido el id
-            const idHuesped = document.getElementById('idHuesped').value;
-            const fechaIngreso = document.getElementById('fechaIngreso').value;
-            const fechaSalida = document.getElementById('fechaSalida').value;
-            const abono = document.getElementById('abono').value || 0;
-            
-        console.log(idHuesped); 
+    const numeroHabitacion = document.getElementById('numeroHabitacion').value;
+    const idHuesped = document.getElementById('idHuesped').value;
+    const fechaIngreso = document.getElementById('fechaIngreso').value;
+    const fechaSalida = document.getElementById('fechaSalida').value;
+    const abono = document.getElementById('abono').value || 0;
 
-        const reserva = {
-            numeroHabitacion,
-            idHuesped,
-            fechaIngreso,
-            fechaSalida,
-            abono
-        };
+    Swal.fire({
+        title: 'Procesando reserva...',
+        text: 'Por favor, espera',
+        icon: 'info',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 
-        console.log('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
-        console.alert('Datos de la reserva a enviar:', reserva); // Agregar log para depuración
+    const reserva = {
+        numeroHabitacion,
+        idHuesped,
+        fechaIngreso,
+        fechaSalida,
+        abono
+    };
 
-        fetch('/api/reservas', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reserva)
-        })
-        .then(response => {
-            console.log('Respuesta del servidor:', response); // Agregar log para depuración
-            return response.json();
-        })
-        .then(data => {
-            console.log('Datos recibidos del servidor:', data); // Agregar log para depuración
+    fetch('/api/reservas', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reserva)
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close(); // Cierra el mensaje de carga
+
         if (data.success) {
-            alert('Reserva realizada exitosamente');
-            modal.style.display = 'none';
+            Swal.fire({
+                title: '¡Reserva exitosa!',
+                text: 'La reserva se ha realizado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                modal.style.display = 'none';
+                location.reload(); // Recarga la página
+            });
+
         } else {
-            alert('Error al realizar la reserva: ' + data.message);
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo realizar la reserva: ' + data.message,
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            });
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error al realizar la reserva');
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al realizar la reserva',
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+        });
     });
-    console.log('Formulario enviado');
-    });
+});
     </script>
 </body>
 </html>
