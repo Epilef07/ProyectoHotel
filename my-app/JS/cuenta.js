@@ -21,18 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
         listView.classList.add('active');
         projectsList.classList.remove('jsGridView');
         projectsList.classList.add('jsListView');
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        }
     });
     gridView.addEventListener('click', function () {
         gridView.classList.add('active');
         listView.classList.remove('active');
         projectsList.classList.remove('jsListView');
         projectsList.classList.add('jsGridView');
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        }
     });
     document.querySelector('.messages-btn').addEventListener('click', function () {
         document.querySelector('.messages-section').classList.add('show');
@@ -138,3 +132,19 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.toggle('light-mode');
     });
 });
+
+function imprimirAbono() {
+    var abono = document.getElementById('abono').value;
+    if (abono) {
+        var ventanaImpresion = window.open('', '', 'height=400,width=600');
+        ventanaImpresion.document.write('<html><head><title>Imprimir Abono</title>');
+        ventanaImpresion.document.write('</head><body>');
+        ventanaImpresion.document.write('<h1>Cantidad del Abono</h1>');
+        ventanaImpresion.document.write('<p>' + abono + '</p>');
+        ventanaImpresion.document.write('</body></html>');
+        ventanaImpresion.document.close();
+        ventanaImpresion.print();
+    } else {
+        alert('Debes ingresar un abono para poder imprimir.');
+    }
+}

@@ -286,7 +286,7 @@ border: 1px solid var(--secondary-color);
 font-size: 24px;
 line-height: 32px;
 font-weight: 700;
-color: var(--main-color);
+color: var (--main-color);
 }
 .status-type {
 position: relative;
@@ -642,10 +642,6 @@ top: 58px;
 background-color: var(--message-btn);
 border: none;
 color: var(--main-color);
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 4px;
 display: none;
 }
 @media screen and (max-width: 980px) {
@@ -814,13 +810,12 @@ footer {
     color: var(--main-color);
 }
 
-/* ...existing code... */
-
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajustar el tamaño de las columnas */
+    display: flex;
+    flex-direction: row; /* Cambiar a disposición en fila */
     gap: 20px;
     margin-top: 20px;
+    flex-wrap: wrap; /* Permitir que los elementos se ajusten a la siguiente línea si es necesario */
 }
 
 .task-section, .notes-section {
@@ -895,8 +890,9 @@ footer {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 300px; /* Ajustar el ancho máximo */
+    flex: 1 1 100%; /* Hacer que las habitaciones ocupen todo el ancho del contenedor */
     margin: 0 auto; /* Centrar los divs */
+    width: 100%; /* Hacer que las habitaciones ocupen todo el ancho del contenedor */
 }
 
 .room h3 {
@@ -912,28 +908,65 @@ footer {
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 300px; /* Ajustar el tamaño de las imágenes */
+    height: 800px; /* Reducir el tamaño de las imágenes */
     margin-bottom: 10px;
 }
 
 .carousel-inner {
     display: flex;
-    width: 200%; /* Ajustar el tamaño total del contenedor */
-    animation: slide 5s infinite; /* Cambiar a animación infinita */
-    transition: transform 1s ease-in-out; /* Hacer la animación fluida */
+    width: 100%; /* Ajustar el tamaño total del contenedor */
+    transition: none; /* Quitar la animación */
+    position: relative; /* Añadir posición relativa */
 }
 
 .carousel-inner img {
-    width: 300px; /* Ajustar el tamaño de las imágenes */
-    height: 300px; /* Ajustar el tamaño de las imágenes */
-    object-fit: cover;
+    width: 100%; /* Ajustar el tamaño de las imágenes */
+    height: 100%; /* Ajustar el tamaño de las imágenes */
+    object-fit: contain; /* Ajustar para que la imagen se vea completa sin recortes */
     border-radius: 10px;
+    transition: none; /* Quitar transición para el zoom */
 }
 
-@keyframes slide {
-    0% { transform: translateX(0); }
-    50% { transform: translateX(-100%); }
-    100% { transform: translateX(-120%); } /* Mantener la última posición */
+/* Quitar el efecto de zoom al pasar el cursor */
+.carousel-inner img:hover {
+    transform: none;
+}
+
+.carousel-inner .carousel-item {
+    position: absolute; /* Hacer que las imágenes se posicionen una encima de la otra */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Ocultar las imágenes por defecto */
+    transition: opacity 2s ease; /* Hacer la transición más lenta */
+    display: flex; /* Asegurarse de que las imágenes se muestren como flex */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}
+
+.carousel-inner .carousel-item.active {
+    position: relative; /* La imagen activa debe ser relativa */
+    opacity: 1; /* Mostrar la imagen activa */
+}
+
+@keyframes slideShow {
+    0% { opacity: 1; }
+    40% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.carousel-inner .carousel-item:nth-child(1) {
+    animation: slideShow 10s infinite;
+}
+
+.carousel-inner .carousel-item:nth-child(2) {
+    animation: slideShow 10s infinite 5s;
+}
+
+.carousel-inner .carousel-item:nth-child(3) {
+    animation: slideShow 10s infinite 10s;
 }
 
 .dark .room {
@@ -1122,5 +1155,87 @@ body.dark-mode {
     color: var(--main-color);
 }
 
-/* ...existing code... */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
 
+.modal-content {
+    position: relative;
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    max-width: 700px;
+}
+
+.modal-slide {
+    display: none;
+    animation: fadeIn 0.5s; /* Añadir animación de desvanecimiento */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    animation: slideIn 0.5s; /* Añadir animación de deslizamiento */
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+    animation: slideInNext 0.5s; /* Añadir animación de deslizamiento */
+}
+
+@keyframes slideInNext {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
