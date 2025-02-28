@@ -4,7 +4,7 @@ const path = require('path');
 const connection = require('./dbConnection');
 const { agregarHuesped, buscarHuesped, actualizarHuesped } = require('./crudHuespedes');
 const { agregarTarea, obtenerTareas, actualizarTarea, eliminarTarea } = require('./crudTareas');
-const { agregarReserva } = require('./reservaciones'); // Ruta corregida
+const { agregarReserva, obtenerReservas } = require('./reservaciones'); // Ruta corregida
 
 const app = express();
 const port = 3000;
@@ -198,10 +198,21 @@ app.post('/api/reservas', (req, res) => {
     agregarReserva(reserva, (err, results) => {
         if (err) {
             console.error('Error al agregar la reserva:', err.message);
-            return res.status(500).json({ success: false, message: 'Error al agregar la reserva' ,error: err});
+            return res.status(500).json({ success: false, message: 'Error al agregar la reserva', error: err });
         }
         console.log('Reserva agregada correctamente');
         res.json({ success: true, message: 'Reserva agregada correctamente', results });
+    });
+});
+
+// Ruta para obtener las reservas actuales
+app.get('/api/reservas', (req, res) => {
+    obtenerReservas((err, results) => {
+        if (err) {
+            console.error('Error al obtener las reservas:', err.message);
+            return res.status(500).json({ success: false, message: 'Error al obtener las reservas', error: err });
+        }
+        res.json(results);
     });
 });
 
