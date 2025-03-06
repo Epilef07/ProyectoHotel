@@ -847,11 +847,15 @@ footer {
 
 .info-cards {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura completa de la pantalla */
 }
 
 .info-card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
     background-color: var(--projects-section);
     border-radius: 12px;
     padding: 20px;
@@ -859,9 +863,11 @@ footer {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     margin-top: 20px;
+    justify-items: center; /* Centrar contenido horizontalmente */
 }
 
 .info-card h3 {
+    grid-column: span 2;
     margin-top: 0;
     color: var(--main-color);
 }
@@ -870,23 +876,39 @@ footer {
     color: var(--secondary-color);
 }
 
-.info-card {
-    background-color: var(--projects-section);
-    border-radius: 12px;
-    padding: 20px;
+.info-card .info-label {
+    font-weight: bold;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.info-card .info-value {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.info-card table {
     width: 100%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    border-collapse: collapse;
     margin-top: 20px;
+    text-align: center; /* Centrar texto en la tabla */
 }
 
-.info-card h3 {
-    margin-top: 0;
-    color: var(--main-color);
+.info-card th, .info-card td {
+    border: 1px solid #ddd;
+    padding: 8px;
 }
 
-.info-card p {
-    color: var(--secondary-color);
+.info-card th {
+    background-color: #4CAF50; /* Verde */
+    color: white; /* Color de la letra blanca */
+}
+
+.info-card table th {
+    background-color: #4CAF50; /* Verde */
+    color: white; /* Color de la letra blanca */
+    padding: 10px;
+    text-align: left;
 }
 
 .navbar {
@@ -1212,6 +1234,95 @@ top: 10px;
 
 .navbar-toggle svg path {
     stroke: var(--main-color); /* Usa la variable para el color de las líneas */
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 10px;
+}
+
+.form-group-inline .form-group {
+    flex: 1;
+}
+
+#buscar-huesped-btn {
+    background-color: #4CAF50; /* Verde */
+    border: none;
+    color: white;
+    padding: 10px 20px; /* Reducir el tamaño del padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px auto; /* Centrar el botón horizontalmente */
+    cursor: pointer;
+    border-radius: 12px;
+    display: block; /* Asegurar que el botón ocupe solo el espacio necesario */
+}
+
+#buscar-huesped-btn:hover {
+    background-color: #45a049; /* Verde oscuro */
+}
+
+.info-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+    margin-bottom: 15px;
+    color: #1f1c2e;
+}
+
+.info-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.info-card th,
+.info-card td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.info-card th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+}
+
+.info-card tr:hover {
+    background-color: #f5f5f5;
+}
+
+#reservas-actuales {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#reservas-actuales th,
+#reservas-actuales td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#reservas-actuales th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#reservas-actuales tr:hover {
+    background-color: #f5f5f5;
+}
+
+#reservas-actuales tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 

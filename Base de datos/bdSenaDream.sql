@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS reserva(
     idHuesped BIGINT NOT NULL,
     fechaIngreso DATE NOT NULL,
     fechaSalida DATE NOT NULL,
-    abono SMALLINT,
+    abono DECIMAL(10,2),
     FOREIGN KEY(idAdministrador) REFERENCES administrador(id),
     FOREIGN KEY(idAprendiz) REFERENCES aprendiz(id),
     FOREIGN KEY(numeroHabitacion) REFERENCES habitacion(numeroHabitacion),
