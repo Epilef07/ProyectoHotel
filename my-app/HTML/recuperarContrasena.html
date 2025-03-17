@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1">
-    <title>Restablecer Contraseña</title>
+    <title>Recordatorio de Contraseña</title>
     <link rel="shortcut icon" href="/IMAGENES/iconSena.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/CSS/styleRecuperarContrasena.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
-<body 
-style="background-image: url(/IMAGENES/Fondo%20de%20Pantalla.png);" style="display:flex; align-items:center; justify-content:center;">
+<body style="background-image: url(/IMAGENES/Fondo%20de%20Pantalla.png); display:flex; align-items:center; justify-content:center;">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="login-page">
                 <div class="form">
-                    <form class="login-form" method="post">
-                        <h2><i class="fas fa-lock"></i> Restablecer Contraseña</h2>
-                        <input type="text" placeholder="Nueva Contraseña" required />
-                        <input type="password" placeholder="Confirmar Contraseña" required/>
-                        <button type="submit" name="send2">Restablecer Contraseña</button>
+                    <!-- Nuevo formulario para envío de recordatorio de contraseña -->
+                    <form id="recuperarForm" method="post">
+                        <h2><i class="fas fa-envelope"></i> Recordatorio de Contraseña</h2>
+                        <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required />
+                        <button type="submit">Enviar Recordatorio</button>
+                        <div id="mensaje" style="display:none; margin-top: 10px;"></div>
                     </form>
                 </div>
             </div>

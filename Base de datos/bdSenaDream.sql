@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS hoteleria;
-USE hoteleria;	
+USE hoteleria;
 
 CREATE TABLE IF NOT EXISTS hotel(
     nit BIGINT NOT NULL PRIMARY KEY,
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS administrador(
     fechaNacimiento DATE NOT NULL,
     telefono BIGINT NOT NULL,
     correoElectronico VARCHAR(255),
+    resetToken VARCHAR(255), -- Campo para el token de restablecimiento de contraseña
     FOREIGN KEY (nit) REFERENCES hotel(nit)
 );
 
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS aprendiz(
     telefono BIGINT NOT NULL,
     correoElectronico VARCHAR(255) NOT NULL,
     fechaHoraIngreso TIMESTAMP,
+    resetToken VARCHAR(255), -- Campo para el token de restablecimiento de contraseña
     FOREIGN KEY (idAdministrador) REFERENCES administrador(id)
 );
 
@@ -53,8 +55,8 @@ CREATE TABLE IF NOT EXISTS habitacion(
 
 CREATE TABLE IF NOT EXISTS reserva(
     codigoReserva BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idAdministrador BIGINT ,
-    idAprendiz BIGINT ,
+    idAdministrador BIGINT,
+    idAprendiz BIGINT,
     numeroHabitacion SMALLINT NOT NULL,
     idHuesped BIGINT NOT NULL,
     fechaIngreso DATE NOT NULL,
@@ -67,21 +69,32 @@ CREATE TABLE IF NOT EXISTS reserva(
 );
 
 CREATE TABLE IF NOT EXISTS tareas(
-id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-idAdministrador BIGINT NOT NULL ,
-idAprendiz BIGINT NOT NULL ,
-descripcion VARCHAR(255),
-FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
-FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idAdministrador BIGINT NOT NULL,
+    idAprendiz BIGINT NOT NULL,
+    descripcion VARCHAR(255),
+    FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
+    FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
 );
 
 CREATE TABLE IF NOT EXISTS usuarios (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombreUsuario VARCHAR(255) NOT NULL UNIQUE, -- Nombre de usuario (nombre del aprendiz o administrador)
-    password VARCHAR(255) NOT NULL, -- Contraseña (número de identificación)
-    rol ENUM('admin', 'user') NOT NULL, -- Rol del usuario
-    idAdministrador BIGINT, -- ID del administrador
-    idAprendiz BIGINT, -- ID del aprendiz
+    nombreUsuario VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    rol ENUM('admin', 'user') NOT NULL,
+    idAdministrador BIGINT,
+    idAprendiz BIGINT,
     FOREIGN KEY (idAdministrador) REFERENCES administrador(id),
     FOREIGN KEY (idAprendiz) REFERENCES aprendiz(id)
+);
+
+-- Tabla para almacenar los productos del minibar
+CREATE TABLE IF NOT EXISTS producto_minibar (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    referencia ENUM('bebidas energeticas', 'galletas', 'golosinas', 'snaks', 'gaseosas', 'paqueteria') NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    imagen VARCHAR(512) NOT NULL,
+    cantidad INT NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

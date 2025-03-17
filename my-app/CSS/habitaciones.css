@@ -890,7 +890,9 @@ footer {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1 1 100%; /* Hacer que las habitaciones ocupen todo el ancho del contenedor */
+    display: flex; /* Cambiar a disposición en fila */
+    flex-direction: row; /* Cambiar a disposición en fila */
+    gap: 20px; /* Añadir espacio entre la imagen y la descripción */
     margin: 0 auto; /* Centrar los divs */
     width: 100%; /* Hacer que las habitaciones ocupen todo el ancho del contenedor */
 }
@@ -907,9 +909,10 @@ footer {
 .carousel {
     position: relative;
     overflow: hidden;
-    width: 100%;
-    height: 800px; /* Reducir el tamaño de las imágenes */
+    width: 50%; /* Ajustar el tamaño de las imágenes a la mitad del ancho */
+    height: 400px; /* Reducir el tamaño de las imágenes */
     margin-bottom: 10px;
+    box-shadow: 0 0 20px 5px rgba(0, 255, 0, 0.5);
 }
 
 .carousel-inner {
@@ -967,6 +970,23 @@ footer {
 
 .carousel-inner .carousel-item:nth-child(3) {
     animation: slideShow 10s infinite 10s;
+}
+
+.room-description {
+    width: 50%; /* Ajustar el tamaño de la descripción a la mitad del ancho */
+    color: var(--secondary-color);
+}
+
+.room-description h3 {
+    font-size: 28px; /* Aumentar el tamaño del texto */
+    width: 100%; /* Hacer que el texto ocupe todo el ancho */
+    text-align: center; /* Centrar el texto */
+    color: green; /* agregado: título en verde */
+}
+
+.room-description p {
+    font-size: 27px; /* Aumentar un poco más el tamaño del texto de descripción */
+    color: var(--secondary-color);
 }
 
 .dark .room {
@@ -1165,14 +1185,31 @@ body.dark-mode {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.8);
+    text-align: center; /* centra el contenido */
 }
 
 .modal-content {
     position: relative;
     margin: auto;
     padding: 0;
-    width: 80%;
-    max-width: 700px;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Nuevo estilo para imagen modal responsiva */
+.modal-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+/* Ajuste responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+    .modal-content {
+         width: 100%;
+         max-width: 100%;
+    }
 }
 
 .modal-slide {
@@ -1205,34 +1242,20 @@ body.dark-mode {
 .prev,
 .next {
     cursor: pointer;
-    position: absolute;
+    position: absolute; /* se mantiene la posición absoluta, relativa al modal */
     top: 50%;
-    width: auto;
+    transform: translateY(-50%);
     padding: 16px;
-    margin-top: -22px;
-    color: #fff;
-    font-weight: bold;
     font-size: 20px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-    animation: slideIn 0.5s; /* Añadir animación de deslizamiento */
+    /* quitar o ajustar border-radius si es necesario */
 }
 
-@keyframes slideIn {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(0); }
+.prev {
+    left: 20px; /* ubicado en el extremo izquierdo con margen */
 }
 
 .next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-    animation: slideInNext 0.5s; /* Añadir animación de deslizamiento */
-}
-
-@keyframes slideInNext {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+    right: 20px; /* ubicado en el extremo derecho con margen */
 }
 
 .prev:hover,

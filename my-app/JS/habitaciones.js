@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+ocument.addEventListener('DOMContentLoaded', function () {
     var modeSwitch = document.querySelector('.mode-switch');
     var isDarkMode = localStorage.getItem('darkMode') === 'true';
 

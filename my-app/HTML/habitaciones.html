@@ -108,7 +108,6 @@
             </div>
             <div class="grid-container">
                 <div class="room">
-                    <h3>Habitación 1</h3>
                     <div class="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -122,16 +121,18 @@
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top: 0px;">Habitación: 501
+                    <div class="room-description">
+                        <h3>Habitación 501</h3>
+                        <p>Habitación: 501
 
-                        Habitación Twin sencilla, dos almohadas en cada una y un cojín en cada una, dos mesas de noche, closet con 4 ganchos, un sillón, un espejo
-                        
-                        En el baño tenemos 2 toallas de cuerpo dos toallas de mano y un rodapiéi o tapete de baño, amenities (dos shampoos, dos rinse, dos jabones de cuerpo, dos kit dental y un gorro de baño) 
-                        
-                        Aire acondicionado, televisor, microondas y nevera pequeña</p>
+                            Habitación Twin sencilla, dos almohadas en cada una y un cojín en cada una, dos mesas de noche, closet con 4 ganchos, un sillón, un espejo
+                            
+                            En el baño tenemos 2 toallas de cuerpo dos toallas de mano y un rodapiéi o tapete de baño, amenities (dos shampoos, dos rinse, dos jabones de cuerpo, dos kit dental y un gorro de baño) 
+                            
+                            Aire acondicionado, televisor, microondas y nevera pequeña</p>
+                    </div>
                 </div>
                 <div class="room">
-                    <h3>Habitación 502</h3>
                     <div class="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -145,16 +146,18 @@
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top: 0px;">Habitación: 502
+                    <div class="room-description">
+                        <h3>Habitación 502</h3>
+                        <p>Habitación: 502
 
-                        Habitación acomodación doble, cuatro almohadas, un cojín, una mesa de noche, una mesa auxiliar, dos sillones, un espejo
-                        
-                        Una toalla de cuerpo una toalla de mano un rodapié o tapete de baño, amenities (un shampoo, un jabón, un rinse, un kit dental, un gorro de baño, dos jabones de cuerpo)
-                        
-                        Aire acondicionado, microondas, una nevera pequeña, televiso</p>
+                            Habitación acomodación doble, cuatro almohadas, un cojín, una mesa de noche, una mesa auxiliar, dos sillones, un espejo
+                            
+                            Una toalla de cuerpo una toalla de mano un rodapié o tapete de baño, amenities (un shampoo, un jabón, un rinse, un kit dental, un gorro de baño, dos jabones de cuerpo)
+                            
+                            Aire acondicionado, microondas, una nevera pequeña, televiso</p>
+                    </div>
                 </div>
                 <div class="room">
-                    <h3>Habitación 503</h3>
                     <div class="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -168,13 +171,16 @@
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top: 0px;">Habitación 503:
+                    <div class="room-description">
+                        <h3>Habitación 503</h3>
+                        <p>Habitación 503:
 
-                        Habitación en acomodación doble, cuatro almohadas, un cojín, una mesa de noche, una mesa auxiliar, un sillon, un espejo, closet con cuatro ganchos 
-                        
-                        Una toalla de cuerpo, una toalla de manos, rodapié o tapete de baño, amenities (un shampoo, un rinse, un kit dental, dos jabones de cuerpo, un gorro de baño)
-                        
-                        Aire acondicionado y televisor (habitación 502 no cuenta con microondas ni nevera)</p>
+                            Habitación en acomodación doble, cuatro almohadas, un cojín, una mesa de noche, una mesa auxiliar, un sillon, un espejo, closet con cuatro ganchos 
+                            
+                            Una toalla de cuerpo, una toalla de manos, rodapié o tapete de baño, amenities (un shampoo, un rinse, un kit dental, dos jabones de cuerpo, un gorro de baño)
+                            
+                            Aire acondicionado y televisor (habitación 502 no cuenta con microondas ni nevera)</p>
+                    </div>
                 </div>
             </div>     
         </div>
@@ -225,6 +231,72 @@
         document.getElementById('navbar-toggle').addEventListener('click', function() {
             var sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('hidden');
+        });
+
+        const modal = document.getElementById("imageModal");
+        let modalSlides = document.querySelectorAll(".modal-slide");
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            modalSlides.forEach((slide, idx) => {
+                slide.style.display = (idx === index) ? "block" : "none";
+            });
+        }
+
+        // Para cada carrusel se asigna el listener que crea slides dinámicamente
+        document.querySelectorAll(".carousel").forEach(carousel => {
+            carousel.querySelectorAll("img").forEach((img, idx) => {
+                img.addEventListener("click", function() {
+                    modal.style.display = "block";
+                    // Obtener el carrusel actual y sus imágenes
+                    const imgs = carousel.querySelectorAll("img");
+                    // Obtener el contenedor modal-content
+                    const modalContent = document.querySelector(".modal-content");
+                    // Eliminar slides existentes (dejando los botones si están)
+                    modalContent.querySelectorAll(".modal-slide").forEach(slide => slide.remove());
+                    // Clonar cada imagen del carrusel en un nuevo modal-slide
+                    imgs.forEach((imgEl) => {
+                        let slideDiv = document.createElement("div");
+                        slideDiv.className = "modal-slide";
+                        slideDiv.appendChild(imgEl.cloneNode(true));
+                        // Insertar antes de los botones de navegación (si existen) o al inicio
+                        const navBtn = modalContent.querySelector(".prev");
+                        if(navBtn){
+                            modalContent.insertBefore(slideDiv, navBtn);
+                        } else {
+                            modalContent.appendChild(slideDiv);
+                        }
+                    });
+                    // Actualiza la variable modalSlides
+                    modalSlides = document.querySelectorAll(".modal-slide");
+                    currentSlide = idx;
+                    showSlide(currentSlide);
+                });
+            });
+        });
+
+        // Acción para cerrar el modal
+        document.getElementById("closeModal").addEventListener("click", function(){
+            modal.style.display = "none";
+        });
+
+        // Botón anterior
+        document.getElementById("prev").addEventListener("click", function(){
+            currentSlide = (currentSlide - 1 + modalSlides.length) % modalSlides.length;
+            showSlide(currentSlide);
+        });
+
+        // Botón siguiente
+        document.getElementById("next").addEventListener("click", function(){
+            currentSlide = (currentSlide + 1) % modalSlides.length;
+            showSlide(currentSlide);
+        });
+
+        // Cerrar modal si se hace clic fuera del contenido
+        window.addEventListener("click", function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         });
     </script>
 </body>

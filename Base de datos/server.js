@@ -12,7 +12,7 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Asegúrate de que esto esté presente
 
-// Servir archivos estáticos desde las diferentes carpetas
+// Rutas estáticas
 app.use(express.static(path.join(__dirname, '../my-app/HTML')));
 app.use('/CSS', express.static(path.join(__dirname, '../my-app/CSS')));
 app.use('/JS', express.static(path.join(__dirname, '../my-app/JS')));
@@ -29,14 +29,19 @@ app.get('/HTML/:file', (req, res) => {
     res.sendFile(path.join(__dirname, `../my-app/HTML/${file}`));
 });
 
-// Ruta para manejar el registro de aprendices
+// Ejemplo de otras rutas: Registro de aprendices, login, etc…
 app.post('/api/register', (req, res) => {
-    const { tipoDocumento, numeroDocumento, nombreCompleto, telefono, numeroFicha, correoElectronico } = req.body;
+    const { tipoDocumento, id, nombreCompleto, telefono, numeroFicha, correoElectronico } = req.body;
 
-    const query = 'INSERT INTO aprendiz (id, idAdministrador, tipoDocumento, numeroFicha, nombreCompleto, telefono, correoElectronico, fechaHoraIngreso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = `
+        INSERT INTO aprendiz 
+        (id, idAdministrador, tipoDocumento, numeroFicha, nombreCompleto, telefono, correoElectronico, fechaHoraIngreso) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
     const values = [
-        numeroDocumento, // Usar el número de documento como ID
-        1, // ID del administrador, puedes cambiarlo según tu lógica
+        id, // Usar el id proporcionado
+        1, // ID del administrador por defecto
         tipoDocumento,
         numeroFicha,
         nombreCompleto,
@@ -48,10 +53,19 @@ app.post('/api/register', (req, res) => {
     connection.query(query, values, (err, results) => {
         if (err) {
             console.error('Error al registrar aprendiz:', err);
-            return res.status(500).json({ success: false, message: 'Error al registrar aprendiz' });
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error al registrar aprendiz',
+                error: err.message 
+            });
         }
+        
         console.log('Aprendiz registrado exitosamente:', results);
-        res.redirect('/HTML/index.html'); // Redirigir a la página de inicio después de un registro exitoso
+        res.json({ 
+            success: true, 
+            message: 'Aprendiz registrado exitosamente',
+            data: results 
+        });
     });
 });
 
@@ -216,7 +230,275 @@ app.get('/api/reservas', (req, res) => {
     });
 });
 
+// Ruta para resetear contraseña de administrador o aprendiz
+app.post('/api/reset-password', (req, res) => {
+    const { token } = req.body; // Solo necesitamos el token
+    
+    console.log('Intento de reseteo de contraseña para token:', token);
+
+    if (!token) {
+        console.log('Token no proporcionado');
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Token es requerido' 
+        });
+    }
+
+    // Primero buscar en administrador
+    const queryAdmin = 'SELECT id FROM administrador WHERE resetToken = ?';
+    
+    try {
+        connection.query(queryAdmin, [token], (err, results) => {
+            if (err) {
+                console.error('Error en la consulta SQL (admin):', err);
+                return res.status(500).json({ 
+                    success: false, 
+                    message: 'Error interno del servidor',
+                    error: err.message
+                });
+            }
+            
+            if (results.length > 0) {
+                const adminId = results[0].id;
+                connection.query('UPDATE administrador SET resetToken = NULL WHERE resetToken = ?', [token], (err, results) => {
+                    if (err) {
+                        console.error('Error al limpiar token:', err);
+                        return res.status(500).json({ 
+                            success: false, 
+                            message: 'Error interno del servidor',
+                            error: err.message
+                        });
+                    }
+                    
+                    console.log('Token limpiado correctamente para administrador');
+                    return res.status(200).json({ 
+                        success: true, 
+                        message: 'Contraseña restablecida correctamente',
+                        id: adminId // Devolver el ID como contraseña
+                    });
+                });
+            } else {
+                // Si no está en administrador, buscar en aprendiz
+                const queryAprendiz = 'SELECT id FROM aprendiz WHERE resetToken = ?';
+                connection.query(queryAprendiz, [token], (err, results) => {
+                    if (err) {
+                        console.error('Error en la consulta SQL (aprendiz):', err);
+                        return res.status(500).json({ 
+                            success: false, 
+                            message: 'Error interno del servidor',
+                            error: err.message
+                        });
+                    }
+                    
+                    if (results.length > 0) {
+                        const aprendizId = results[0].id;
+                        connection.query('UPDATE aprendiz SET resetToken = NULL WHERE resetToken = ?', [token], (err, results) => {
+                            if (err) {
+                                console.error('Error al limpiar token:', err);
+                                return res.status(500).json({ 
+                                    success: false, 
+                                    message: 'Error interno del servidor',
+                                    error: err.message
+                                });
+                            }
+                            
+                            console.log('Token limpiado correctamente para aprendiz');
+                            return res.status(200).json({ 
+                                success: true, 
+                                message: 'Contraseña restablecida correctamente',
+                                id: aprendizId // Devolver el ID como contraseña
+                            });
+                        });
+                    } else {
+                        return res.status(404).json({ 
+                            success: false, 
+                            message: 'No se encontró un usuario con ese token' 
+                        });
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error inesperado:', error);
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Error interno del servidor',
+            error: error.message
+        });
+    }
+});
+
+// Ruta para envío de correo de reseteo que valida la existencia del correo en las tablas administrador y aprendiz
+app.post('/api/send-reset-email', async (req, res) => {
+    const { email } = req.body;
+    console.log('Solicitud de recuperación para:', email);
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetLink = `http://localhost:3000/HTML/mostrarContrasena.html?token=${resetToken}`;
+
+    // Consulta unificada para verificar si el correo existe en las tablas "administrador" y "aprendiz"
+    // Se ha eliminado cualquier referencia a "numeroDocumento"
+    const query = `
+        SELECT id, 'administrador' AS tipo FROM administrador WHERE correoElectronico = ?
+        UNION ALL
+        SELECT id, 'aprendiz' AS tipo FROM aprendiz WHERE correoElectronico = ?
+    `;
+    connection.query(query, [email, email], async (err, results) => {
+        if (err) {
+            console.error('Error en la consulta unificada:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error interno del servidor', 
+                error: err.message 
+            });
+        }
+        
+        if (results.length === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Correo electrónico no encontrado'
+            });
+        }
+        
+        const user = results[0];
+        const updateQuery = `UPDATE ${user.tipo} SET resetToken = ? WHERE id = ?`;
+        connection.query(updateQuery, [resetToken, user.id], async (errUpdate) => {
+            if (errUpdate) {
+                console.error(`Error al actualizar token en ${user.tipo}:`, errUpdate);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error al procesar la solicitud',
+                    error: errUpdate.message
+                });
+            }
+            try {
+                await emailService.sendPasswordReset(email, resetLink);
+                return res.json({
+                    success: true,
+                    message: 'Correo enviado exitosamente'
+                });
+            } catch (emailError) {
+                console.error('Error al enviar correo:', emailError);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error al enviar el correo'
+                });
+            }
+        });
+    });
+});
+
+// Ruta para resetear contraseña (al hacer clic en el botón del correo)
+app.post('/api/reset-password', (req, res) => {
+    const { token } = req.body;
+    console.log('Intento de resetear contraseña para token:', token);
+    if (!token) {
+        console.log('Token no proporcionado');
+        return res.status(400).json({ success: false, message: 'Token es requerido' });
+    }
+    // Buscar en administrador
+    const queryAdmin = 'SELECT id FROM administrador WHERE resetToken = ?';
+    connection.query(queryAdmin, [token], (err, results) => {
+        if (err) {
+            console.error('Error en consulta (admin):', err);
+            return res.status(500).json({ success: false, message: 'Error interno del servidor', error: err.message });
+        }
+        if (results.length > 0) {
+            const adminId = results[0].id;
+            connection.query('UPDATE administrador SET resetToken = NULL WHERE resetToken = ?', [token], (err) => {
+                if (err) {
+                    console.error('Error al limpiar token (admin):', err);
+                    return res.status(500).json({ success: false, message: 'Error interno del servidor', error: err.message });
+                }
+                console.log('Token limpiado para administrador');
+                return res.status(200).json({ success: true, message: 'Contraseña restablecida correctamente', id: adminId });
+            });
+        } else {
+            // Buscar en aprendiz
+            const queryAprendiz = 'SELECT id FROM aprendiz WHERE resetToken = ?';
+            connection.query(queryAprendiz, [token], (err, results) => {
+                if (err) {
+                    console.error('Error en consulta (aprendiz):', err);
+                    return res.status(500).json({ success: false, message: 'Error interno del servidor', error: err.message });
+                }
+                if (results.length > 0) {
+                    const aprendizId = results[0].id;
+                    connection.query('UPDATE aprendiz SET resetToken = NULL WHERE resetToken = ?', [token], (err) => {
+                        if (err) {
+                            console.error('Error al limpiar token (aprendiz):', err);
+                            return res.status(500).json({ success: false, message: 'Error interno del servidor', error: err.message });
+                        }
+                        console.log('Token limpiado para aprendiz');
+                        return res.status(200).json({ success: true, message: 'Contraseña restablecida correctamente', id: aprendizId });
+                    });
+                } else {
+                    return res.status(404).json({ success: false, message: 'No se encontró un usuario con ese token' });
+                }
+            });
+        }
+    });
+});
+
+// Ruta para agregar productos del minibar
+app.post('/api/productos_minibar', (req, res) => {
+    console.log("POST /api/productos_minibar recibido"); // Para depuración
+    const { nombre, referencia, precio, imagen, cantidad } = req.body;
+    const query = `
+        INSERT INTO producto_minibar (nombre, referencia, precio, imagen, cantidad) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
+    connection.query(query, [nombre, referencia, precio, imagen, cantidad], (err, results) => {
+        if (err) {
+            console.error("Error al guardar producto del minibar:", err);
+            return res.status(500).json({ 
+                success: false, 
+                message: "Error al guardar producto",
+                error: err.message 
+            });
+        }
+        console.log("Producto del minibar guardado:", results.insertId);
+        res.json({ 
+            success: true, 
+            message: "Producto guardado correctamente", 
+            id: results.insertId 
+        });
+    });
+});
+
+// Nueva ruta para buscar productos del minibar
+app.get('/api/productos_minibar', (req, res) => {
+    const { referencia, nombre } = req.query;
+    let sql = 'SELECT * FROM producto_minibar WHERE 1';
+    const params = [];
+
+    if (referencia && referencia !== 'todos') {
+       sql += ' AND referencia = ?';
+       params.push(referencia);
+    }
+
+    if (nombre) {
+       sql += ' AND LOWER(nombre) LIKE ?';
+       params.push(`%${nombre.toLowerCase()}%`);
+    }
+
+    connection.query(sql, params, (err, results) => {
+        if (err) {
+            console.error("Error al buscar productos del minibar:", err);
+            return res.status(500).json({ 
+                success: false, 
+                message: "Error al buscar productos",
+                error: err.message 
+            });
+        }
+        res.json({
+            success: true, 
+            products: results
+        });
+    });
+});
+
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
+

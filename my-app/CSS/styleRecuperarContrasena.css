@@ -66,3 +66,27 @@ body{
   display: none;
 }
 
+.password-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+.password-container input {
+    padding-right: 40px;
+}
+
+#togglePassword {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.return-btn {
+    margin-top: 20px;
+    background: #4CAF50;
+}
+
